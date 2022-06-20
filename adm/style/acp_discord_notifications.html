@@ -193,10 +193,10 @@
 					<dl>
 						<dt><label for="dn_forum_{{ forum.FORUM_ID }}">{{ forum.FORUM_NAME }}</label></dt>
 						<dd>
-							<select id="dn_forum_{{ forum.FORUM_ID }}" name="dn_forum[{{ forum.FORUM_ID }}]">
+							<select id="dn_forum_{{ forum.FORUM_ID }}" name="dn_forum[{{ forum.FORUM_ID }}][]" multiple="multiple">
 								<option value="">({{ lang('DISABLED') }})</option>
 								{% for webhook in loops.webhookrow %}
-									<option value="{{ webhook.ALIAS }}"{% if forum.ALIAS == webhook.ALIAS %} selected{% endif %}>{{ webhook.ALIAS }}</option>
+									<option value="{{ webhook.DISCORD_WEBHOOK_ID }}"{% if webhook.DISCORD_WEBHOOK_ID in forum.DISCORD_WEBHOOK_IDS %} selected{% endif %}>{{ webhook.ALIAS }}</option>
 								{% endfor %}
 							</select>
 						</dd>
