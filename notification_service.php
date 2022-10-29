@@ -60,6 +60,15 @@ class notification_service
 		return $this->config['discord_notifications_enabled'] == 1 && $this->config[$notification_type] == 1;
 	}
 
+	public function get_language()
+	{
+		if (isset($this->config['discord_notifications_default_lang']))
+		{
+			return $this->config['discord_notifications_default_lang'];
+		}
+		return '';
+	}
+
 	/**
 	 * Check whether notifications that occur on a specific forum should be generated
 	 *

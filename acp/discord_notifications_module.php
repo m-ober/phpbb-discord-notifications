@@ -100,6 +100,7 @@ class discord_notifications_module
 		$this->template->assign_vars(array(
 			'DN_MASTER_ENABLE'			=> $this->config['discord_notifications_enabled'],
 			'DN_POST_PREVIEW_LENGTH'	=> $this->config['discord_notifications_post_preview_length'],
+			'DN_DEFAULT_LANG'           => $this->config['discord_notifications_default_lang'],
 			'DN_TEST_MESSAGE_TEXT'		=> $this->language->lang('DN_TEST_MESSAGE_TEXT'),
 			'DN_CONNECT_TIMEOUT'		=> $this->config['discord_notifications_connect_timeout'],
 			'DN_EXEC_TIMEOUT'			=> $this->config['discord_notifications_exec_timeout'],
@@ -278,6 +279,7 @@ class discord_notifications_module
 		$this->config->set('discord_notifications_connect_timeout', $connect_timeout);
 		$this->config->set('discord_notifications_exec_timeout', $exec_timeout);
 
+		$this->config->set('discord_notifications_default_lang', $this->request->variable('dn_default_lang', ''));
 		$this->config->set('discord_notification_type_post_create', $this->request->variable('dn_post_create', 0));
 		$this->config->set('discord_notification_type_post_update', $this->request->variable('dn_post_update', 0));
 		$this->config->set('discord_notification_type_post_delete', $this->request->variable('dn_post_delete', 0));
