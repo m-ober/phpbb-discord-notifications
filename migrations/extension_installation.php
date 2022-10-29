@@ -29,42 +29,6 @@ class extension_installation extends \phpbb\db\migration\migration
 	}
 
 	/**
-	* Add the discord notification enabled column to the forums table.
-	* This setting determines whether or not activity on a specific forum will generate a
-	* notification transmitted to Discord.
-	*
-	* @return array Array of table schema
-	* @access public
-	*/
-	public function update_schema()
-	{
-		return array(
-			'add_columns'	=> array(
-				$this->table_prefix . 'forums'	=> array(
-					'discord_notifications' => array('VCHAR:255', ''),
-				),
-			),
-		);
-	}
-
-	/**
-	* Drop the discord notification enabled column from the users table.
-	*
-	* @return array Array of table schema
-	* @access public
-	*/
-	public function revert_schema()
-	{
-		return array(
-			'drop_columns'	=> array(
-				$this->table_prefix . 'forums'	=> array(
-					'discord_notifications',
-				),
-			),
-		);
-	}
-
-	/**
 	* Add Discord notification data to the database.
 	* Note: these changes will automatically get reverted by phpbb if the extension is uninstalled.
 	* Hence the reason why no corresponding revert_data() function exists.

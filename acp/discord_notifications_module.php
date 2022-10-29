@@ -232,10 +232,16 @@ class discord_notifications_module
 		{
 			if ($url === '')
 			{
-				$sql = "DELETE FROM {$table_prefix}discord_webhooks WHERE alias = '" . $this->db->sql_escape($alias) . "'";
-				$this->db->sql_query($sql);
+				// Delete existing discord_webhook_forums
+				$webhook_id = $this->notification_service->query_webhook_id($alias);
+				if ($webhook_id)
+				{
+					$sql = "DELETE FROM {$table_prefix}discord_webhooks_forums WHERE discord_webhook_id = " . (int) $webhook_id;
+					$this->db->sql_query($sql);
+				}
 
-				$sql = "UPDATE " . FORUMS_TABLE . " SET discord_notifications = '' WHERE discord_notifications = '" . $this->db->sql_escape($alias) . "'";
+				// Delete the actual webhook.
+				$sql = "DELETE FROM {$table_prefix}discord_webhooks WHERE alias = '" . $this->db->sql_escape($alias) . "'";
 				$this->db->sql_query($sql);
 			} else
 			{
@@ -249,15 +255,24 @@ class discord_notifications_module
 		}
 
 		// Update configuration per forum
-		$forum_configuration = $this->request->variable('dn_forum', [0 => '']);
+		$forum_configuration = $this->request->variable('dn_forum', [0 => [0 => '']]);
 		foreach ($forum_configuration as $id => $value)
 		{
-			// Don't update deleted entries
-			if ($value === '' || $webhook_configuration[$value] !== '')
+			$sql = "DELETE FROM {$table_prefix}discord_webhooks_forums WHERE forum_id = " . (int) $id;
+			$this->db->sql_query($sql);
+
+			if (!is_array($value))
 			{
-				$sql = "UPDATE " . FORUMS_TABLE . " SET discord_notifications = '" . $this->db->sql_escape($value) .
-					"' WHERE forum_id = " . (int) $id;
-				$this->db->sql_query($sql);
+				$value = array($value);
+			}
+			
+			foreach ($value as $val)
+			{
+				if (!empty($val))
+				{
+					$sql = "INSERT INTO {$table_prefix}discord_webhooks_forums (discord_webhook_id, forum_id) VALUES (" . ((int) $val) . ", " . ((int) $id) . ")";
+					$this->db->sql_query($sql);
+				}
 			}
 		}
 
@@ -309,14 +324,15 @@ class discord_notifications_module
 	{
 		global $table_prefix;
 
-		$sql = "SELECT alias, url FROM {$table_prefix}discord_webhooks ORDER BY alias";
+		$sql = "SELECT alias, url, discord_webhook_id FROM {$table_prefix}discord_webhooks ORDER BY alias";
 		$result = $this->db->sql_query($sql);
 
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$tpl_row = array(
-				'ALIAS'	=> $row['alias'],
-				'URL'	=> $row['url'],
+				'DISCORD_WEBHOOK_ID'	=> $row['discord_webhook_id'],
+				'ALIAS'					=> $row['alias'],
+				'URL'					=> $row['url'],
 			);
 			$this->template->assign_block_vars('webhookrow', $tpl_row);
 		}
@@ -329,7 +345,7 @@ class discord_notifications_module
 	 */
 	private function generate_forum_section()
 	{
-		$sql = "SELECT forum_id, forum_type, forum_name, discord_notifications FROM " . FORUMS_TABLE . " ORDER BY left_id ASC";
+		$sql = "SELECT forum_id, forum_type, forum_name FROM " . FORUMS_TABLE . " ORDER BY left_id ASC";
 		$result = $this->db->sql_query($sql);
 
 		while ($row = $this->db->sql_fetchrow($result))
@@ -347,11 +363,11 @@ class discord_notifications_module
 			{
 				// The labels for all the inputs are constructed based on the forum IDs to make it easy to know which
 				$tpl_row = array(
-							'S_IS_CAT'		=> false,
-							'FORUM_NAME'	=> $row['forum_name'],
-							'FORUM_ID'		=> $row['forum_id'],
-							'ALIAS'			=> $row['discord_notifications'],
-						);
+					'S_IS_CAT'				=> false,
+					'FORUM_NAME'			=> $row['forum_name'],
+					'FORUM_ID'				=> $row['forum_id'],
+					'DISCORD_WEBHOOK_IDS'	=> $this->notification_service->query_forum_webhooks($row['forum_id']),
+				);
 				$this->template->assign_block_vars('forumrow', $tpl_row);
 			}
 			// Other forum types (links) are ignored

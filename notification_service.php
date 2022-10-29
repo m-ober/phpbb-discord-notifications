@@ -66,9 +66,11 @@ class notification_service
 	 * @param int $forum_id The ID of the forum to check
 	 * @return string|false
 	 */
+	 
 	public function get_forum_notification_url($forum_id)
 	{
 		global $table_prefix;
+		$webhooks = array();
 
 		if (is_numeric($forum_id) == false)
 		{
@@ -81,22 +83,22 @@ class notification_service
 		}
 
 		// Query the forum table where forum notification settings are stored
-		$sql = "SELECT discord_notifications FROM " . FORUMS_TABLE . " WHERE forum_id = " . (int) $forum_id;
+		$sql = "SELECT url FROM {$table_prefix}discord_webhooks
+				INNER JOIN {$table_prefix}discord_webhooks_forums ON {$table_prefix}discord_webhooks_forums.discord_webhook_id = {$table_prefix}discord_webhooks.discord_webhook_id
+				WHERE {$table_prefix}discord_webhooks_forums.forum_id = " . (int) $forum_id;
 		$result = $this->db->sql_query($sql);
-		$data = $this->db->sql_fetchrow($result);
-		$this->db->sql_freeresult($result);
 
-		if ($data['discord_notifications'])
+		while ($row = $this->db->sql_fetchrow($result))
 		{
-			$sql = "SELECT url FROM {$table_prefix}discord_webhooks WHERE alias = '" . $this->db->sql_escape($data['discord_notifications']) . "'";
-			$result = $this->db->sql_query($sql);
-			$data2 = $this->db->sql_fetchrow($result);
-			$this->db->sql_freeresult($result);
-
-			return $data2['url'];
+			if ($row['url'])
+			{
+				$webhooks[] = $row['url'];
+			}
 		}
 
-		return false;
+		$this->db->sql_freeresult($result);
+
+		return empty($webhooks) ? false : $webhooks;
 	}
 
 	/**
@@ -128,6 +130,37 @@ class notification_service
 		$data = $this->db->sql_fetchfield('forum_name');
 		$this->db->sql_freeresult($result);
 		return $data;
+	}
+
+
+	/**
+	 * Retrieves the list of discord_webhook_ids for the forum
+	 *
+	 * @param int $forum_id The ID of the forum to query
+	 * @return array|false The name of the forum, or false if not found
+	 */
+	public function query_forum_webhooks($forum_id)
+	{
+		global $table_prefix;
+
+		if (is_numeric($forum_id) == false)
+		{
+			return null;
+		}
+		
+		$webhooks = array();
+
+		$sql = "SELECT discord_webhook_id from {$table_prefix}discord_webhooks_forums WHERE forum_id = " . (int) $forum_id;
+		$result = $this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			if ($row['discord_webhook_id'])
+			{
+				$webhooks[] = $row['discord_webhook_id'];
+			}
+		}
+		$this->db->sql_freeresult($result);
+		return $webhooks;
 	}
 
 	/**
@@ -218,6 +251,21 @@ class notification_service
 	}
 
 	/**
+	 * Retrieves the ID of the discord webhook.
+	 *
+	 * @param string $alias The alias of the discord webhook.
+	 * @return int|false The name of the user, or false if not found
+	 */
+	public function query_webhook_id($alias)
+	{
+		$sql = "SELECT discord_webhook_id from {$table_prefix}discord_webhooks WHERE alias = '" . $this->db->sql_escape($alias) . "'";
+		$result = $this->db->sql_query($sql);
+		$data = $this->db->sql_fetchfield('discord_webhook_id');
+		$this->db->sql_freeresult($result);
+		return $data;
+	}
+
+	/**
 	 * Sends a notification message to Discord. This function checks the master switch configuration for the extension,
 	 * but does no further checks. The caller is responsible for performing full validation of the notification prior
 	 * to calling this function.
@@ -249,7 +297,19 @@ class notification_service
 				$webhook_url = $data['url'];
 			}
 		}
-		$this->execute_discord_webhook($webhook_url, $color, $message, $footer);
+
+
+		if (!empty($webhook_url) && is_array($webhook_url)) 
+		{
+			foreach ($webhook_url as $url)
+			{
+				$this->execute_discord_webhook($url, $color, $message, $footer);
+			}
+		}
+		else
+		{
+			$this->execute_discord_webhook($webhook_url, $color, $message, $footer);
+		}
 	}
 
 	/**
