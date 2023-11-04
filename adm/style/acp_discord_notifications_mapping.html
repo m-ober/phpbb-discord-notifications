@@ -4,6 +4,12 @@
 
 <p>{{ DN_ACP_DESCRIPTION }}</p>
 
+{% if not DN_CURL_AVAILABLE %}
+	<div class="errorbox">
+		<p>{{ lang('DN_MISSING_CURL') }}</p>
+	</div>
+{% endif %}
+
 <form id="acp_board" method="post" action="{{ U_ACTION }}">
 
 	<fieldset>
