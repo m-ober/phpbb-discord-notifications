@@ -65,7 +65,17 @@ class notification_event_listener implements EventSubscriberInterface
 		$this->php_ext = $php_ext;
 
 		// Add notifications text from the langauge file
+		$lang = $notification_service->get_language();
+		if (!empty($lang))
+		{
+			$user_language = $this->language->get_used_language();
+			$this->language->set_user_language($lang);
+		}
 		$this->language->add_lang('discord_notification_messages', 'mober/discordnotifications');
+		if (!empty($lang))
+		{
+			$this->language->set_user_language($user_language);
+		}
 	}
 
 	/**
