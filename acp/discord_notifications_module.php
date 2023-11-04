@@ -180,6 +180,8 @@ class discord_notifications_module
 	{
 		global $table_prefix, $phpbb_container;
 
+		$this->validate_post_request();
+
 		$webhook = $this->request->variable('dn_test_webhook', '', true);
 		$test_message = $this->request->variable('dn_test_message', '');
 
@@ -214,10 +216,7 @@ class discord_notifications_module
 	{
 		global $table_prefix;
 
-		if (!check_form_key(self::PAGE_FORM_NAME))
-		{
-			trigger_error('FORM_INVALID', E_USER_WARNING);
-		}
+		$this->validate_post_request();
 
 		$delete_alias = $this->request->variable('action_delete_alias',  ['' => ''], true);
 		foreach ($delete_alias as $alias => $url)
@@ -233,10 +232,7 @@ class discord_notifications_module
 
 	private function process_settings_form_submit()
 	{
-		if (!check_form_key(self::PAGE_FORM_NAME))
-		{
-			trigger_error('FORM_INVALID', E_USER_WARNING);
-		}
+		$this->validate_post_request();
 
 		// Get form values for the main settings
 		$master_enable = $this->request->variable('dn_master_enable', 0);
@@ -273,10 +269,7 @@ class discord_notifications_module
 	{
 		global $table_prefix;
 
-		if (!check_form_key(self::PAGE_FORM_NAME))
-		{
-			trigger_error('FORM_INVALID', E_USER_WARNING);
-		}
+		$this->validate_post_request();
 
 		// Create new entry
 		$new_alias = $this->request->variable('dn_webhook_new_alias', '', true);
@@ -317,10 +310,7 @@ class discord_notifications_module
 
 	private function process_mapping_form_submit()
 	{
-		if (!check_form_key(self::PAGE_FORM_NAME))
-		{
-			trigger_error('FORM_INVALID', E_USER_WARNING);
-		}
+		$this->validate_post_request();
 
 		// Update configuration per forum
 		$forum_configuration = $this->request->variable('dn_forum', [0 => ''], true);
@@ -428,5 +418,13 @@ class discord_notifications_module
 			// Other forum types (links) are ignored
 		}
 		$this->db->sql_freeresult($result);
+	}
+
+	private function validate_post_request()
+	{
+		if (!check_form_key(self::PAGE_FORM_NAME))
+		{
+			trigger_error($this->language->lang('FORM_INVALID') . adm_back_link($this->u_action), E_USER_WARNING);
+		}
 	}
 }
