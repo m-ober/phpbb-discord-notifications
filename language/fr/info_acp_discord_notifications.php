@@ -1,11 +1,11 @@
 <?php
 /**
  *
- * Discord Notifications. An extension for the phpBB Forum Software package.
- * French translation by Galixte (http://www.galixte.com)
+ * Discord Notifications extension for the phpBB Forum Software package.
  *
- * @copyright (c) 2018 Tyler Olsen <https://github.com/rootslinux>
- * @license GNU General Public License, version 2 (GPL-2.0-only)
+ * @copyright (c) 2018, Tyler Olsen, https://github.com/rootslinux
+ * @copyright (c) 2022, French translation by Fred Rimbert https://forums.caforum.fr
+ * @license GNU General Public License, version 2 (GPL-2.0)
  *
  * This file contains the language strings for the ACP settings page for this extension.
  */
@@ -46,7 +46,7 @@ $lang = array_merge($lang, array(
 
 	// ACP Logs
 	'ACP_DISCORD_NOTIFICATIONS_LOG_UPDATE'		=> 'Paramètres des notifications Discord modifiées',
-	'ACP_DISCORD_NOTIFICATIONS_WEBHOOK_ERROR'	=> 'Discord Webhook returned HTTP status code %d',
-	'ACP_DISCORD_NOTIFICATIONS_CURL_ERROR'		=> 'Discord Webhook cURL error code %d',
-	'ACP_DISCORD_NOTIFICATIONS_JSON_ERROR'		=> 'Discord JSON encode error: %s',
+	'ACP_DISCORD_NOTIFICATIONS_WEBHOOK_ERROR'	=> 'Discord Webhook a renvoyé le code d‘état HTTP %d',
+	'ACP_DISCORD_NOTIFICATIONS_CURL_ERROR'		=> 'Code d‘erreur Discord Webhook cURL %d',
+	'ACP_DISCORD_NOTIFICATIONS_JSON_ERROR'		=> 'Erreur d‘encodage Discord JSON : %s',
 ));

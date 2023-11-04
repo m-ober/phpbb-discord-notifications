@@ -1,11 +1,11 @@
 <?php
 /**
  *
- * Discord Notifications. An extension for the phpBB Forum Software package.
- * French translation by Galixte (http://www.galixte.com)
+ * Discord Notifications extension for the phpBB Forum Software package.
  *
- * @copyright (c) 2018 Tyler Olsen <https://github.com/rootslinux>
- * @license GNU General Public License, version 2 (GPL-2.0-only)
+ * @copyright (c) 2018, Tyler Olsen, https://github.com/rootslinux
+ * @copyright (c) 2022, French translation by Fred Rimbert https://forums.caforum.fr
+ * @license GNU General Public License, version 2 (GPL-2.0)
  *
  * This file contains the language strings for the ACP settings page for this extension.
  */
