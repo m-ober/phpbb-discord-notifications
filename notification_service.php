@@ -70,7 +70,7 @@ class notification_service
 	{
 		global $table_prefix;
 
-		if (is_numeric($forum_id) == false)
+		if (!is_numeric($forum_id))
 		{
 			return false;
 		}
@@ -118,7 +118,7 @@ class notification_service
 	 */
 	public function query_forum_name($forum_id)
 	{
-		if (is_numeric($forum_id) == false)
+		if (!is_numeric($forum_id))
 		{
 			return null;
 		}
@@ -138,7 +138,7 @@ class notification_service
 	 */
 	public function query_post_subject($post_id)
 	{
-		if (is_numeric($post_id) == false)
+		if (!is_numeric($post_id))
 		{
 			return null;
 		}
@@ -159,7 +159,7 @@ class notification_service
 	 */
 	public function query_topic_title($topic_id)
 	{
-		if (is_numeric($topic_id) == false)
+		if (!is_numeric($topic_id))
 		{
 			return null;
 		}
@@ -180,7 +180,7 @@ class notification_service
 	 */
 	public function query_topic_details($topic_id)
 	{
-		if (is_numeric($topic_id) == false)
+		if (!is_numeric($topic_id))
 		{
 			return array();
 		}
@@ -205,7 +205,7 @@ class notification_service
 	 */
 	public function query_user_name($user_id)
 	{
-		if (is_numeric($user_id) == false)
+		if (!is_numeric($user_id))
 		{
 			return false;
 		}
@@ -231,7 +231,7 @@ class notification_service
 	{
 		global $table_prefix;
 
-		if ($this->config['discord_notifications_enabled'] == 0 || isset($message) == false)
+		if ($this->config['discord_notifications_enabled'] == 0 || !isset($message))
 		{
 			return;
 		}
@@ -263,7 +263,7 @@ class notification_service
 	 */
 	public function force_send_discord_notification($discord_webhook_url, $message)
 	{
-		if (!filter_var($discord_webhook_url, FILTER_VALIDATE_URL) || is_string($message) == false || $message == '')
+		if (!filter_var($discord_webhook_url, FILTER_VALIDATE_URL) || !is_string($message) || $message == '')
 		{
 			return false;
 		}
@@ -290,20 +290,20 @@ class notification_service
 	 */
 	private function execute_discord_webhook($discord_webhook_url, $color, $message, $title = null, $preview = null, $footer = null)
 	{
-		if (isset($discord_webhook_url) == false || $discord_webhook_url === '')
+		if (!isset($discord_webhook_url) || $discord_webhook_url === '')
 		{
 			return false;
 		}
-		if (is_integer($color) == false || $color < 0)
+		if (!is_integer($color) || $color < 0)
 		{
 			// Use the default color if we did not receive a valid color value
 			$color = self::DEFAULT_COLOR;
 		}
-		if (is_string($message) == false || $message == '')
+		if (!is_string($message) || $message == '')
 		{
 			return false;
 		}
-		if (isset($footer) == true && (is_string($footer) == false || $footer == ''))
+		if (isset($footer) && (!is_string($footer) || $footer == ''))
 		{
 			return false;
 		}
