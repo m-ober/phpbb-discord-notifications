@@ -34,9 +34,9 @@ $lang = array_merge($lang, array(
 	'DN_SEND_TEST'					=> 'Test starten',
 	'DN_SEND_TEST_DESCRIPTION'		=> 'Wenn alles korrekt konfiguriert ist, sollte die Test-Nachricht im entsprechenden Discord-Kanal auftauchen.',
 	'DN_CONNECT_TIMEOUT'			=> 'Timeout Verbindungsaufbau',
-	'DN_CONNECT_TO_DESCRIPTION'     => 'Zeit in Sekunden, die maximal auf einen Verbindungsaufbau gewartet wird.',
-	'DN_EXEC_TIMEOUT'               => 'Timeout Übertragung',
-	'DN_EXEC_TO_DESCRIPTION'        => 'Maximale Zeit in Sekunden, die die Datenübertragung dauern darf.',
+	'DN_CONNECT_TO_DESCRIPTION'		=> 'Zeit in Sekunden, die maximal auf einen Verbindungsaufbau gewartet wird.',
+	'DN_EXEC_TIMEOUT'				=> 'Timeout Übertragung',
+	'DN_EXEC_TO_DESCRIPTION'		=> 'Maximale Zeit in Sekunden, die die Datenübertragung dauern darf.',
 	'DN_TEST_SETTINGS'				=> 'Test',
 
 	'DN_WEBHOOK_SETTINGS'			=> 'Einträge Bearbeiten',

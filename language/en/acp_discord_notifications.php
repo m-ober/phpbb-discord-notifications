@@ -34,9 +34,9 @@ $lang = array_merge($lang, array(
 	'DN_SEND_TEST'					=> 'Send Test Message',
 	'DN_SEND_TEST_DESCRIPTION'		=> 'Sends the contents of the test message to the Discord webhook. Use this to verify that your webhook is properly functioning.',
 	'DN_CONNECT_TIMEOUT'			=> 'Connect timeout',
-	'DN_CONNECT_TO_DESCRIPTION'     => 'Timeout in seconds to establish a connection to the Webhook endpoint.',
-	'DN_EXEC_TIMEOUT'               => 'Transfer timeout',
-	'DN_EXEC_TO_DESCRIPTION'        => 'Timeout in seconds for data transfer.',
+	'DN_CONNECT_TO_DESCRIPTION'		=> 'Timeout in seconds to establish a connection to the Webhook endpoint.',
+	'DN_EXEC_TIMEOUT'				=> 'Transfer timeout',
+	'DN_EXEC_TO_DESCRIPTION'		=> 'Timeout in seconds for data transfer.',
 	'DN_TEST_SETTINGS'				=> 'Test Settings',
 
 	'DN_WEBHOOK_SETTINGS'			=> 'Edit entries',
