@@ -19,7 +19,9 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	// ACP Module
 	'ACP_DISCORD_NOTIFICATIONS'					=> 'Discord Benachrichtigungen',
-	'ACP_DISCORD_NOTIFICATIONS_TITLE'			=> 'Discord Konfiguration',
+	'ACP_DISCORD_NOTIFICATIONS_SETTINGS'		=> 'Einstellungen',
+	'ACP_DISCORD_NOTIFICATIONS_WEBHOOKS'		=> 'Webhooks',
+	'ACP_DISCORD_NOTIFICATIONS_MAPPING'			=> 'Zuordnung',
 
 	// ACP Logs
 	'ACP_DISCORD_NOTIFICATIONS_LOG_UPDATE'		=> 'Discord Benachrichtigungen: Einstellungen aktualisiert',

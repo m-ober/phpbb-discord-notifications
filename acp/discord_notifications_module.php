@@ -73,32 +73,55 @@ class discord_notifications_module
 		$this->template = $phpbb_container->get('template');
 		$this->user = $phpbb_container->get('user');
 		// Used for sending test messages to Discord
-		$this->notification_service = $phpbb_container->get('mober.discordnotifications.notification_service');
 
 		$this->language->add_lang('acp_discord_notifications', 'mober/discordnotifications');
-		$this->tpl_name = 'acp_discord_notifications';
-		$this->page_title = $this->language->lang('ACP_DISCORD_NOTIFICATIONS_TITLE');
+		$this->page_title = $this->language->lang('ACP_DISCORD_NOTIFICATIONS');
 
 		add_form_key(self::PAGE_FORM_NAME);
 
-		// Process submit actions
-		if ($this->request->is_set_post('action_send_test_message'))
+		switch ($mode)
 		{
-			$this->process_send_test_message();
-		}
-		else if ($this->request->is_set_post('action_delete_alias'))
-		{
-			$this->process_delete_alias();
-		}
-		else if ($this->request->is_set_post('submit'))
-		{
-			$this->process_form_submit();
-		}
+			case 'webhooks':
+				$this->tpl_name = 'acp_discord_notifications_webhooks';
 
-		// Generate the dynamic HTML content for enabling/disabling forum notifications
-		$this->generate_forum_section();
+				if ($this->request->is_set_post('action_send_test_message'))
+				{
+					$this->process_send_test_message();
+				}
+				else if ($this->request->is_set_post('action_delete_alias'))
+				{
+					$this->process_delete_alias();
+				}
+				else if ($this->request->is_set_post('submit'))
+				{
+					$this->process_webhooks_form_submit();
+				}
 
-		$this->generate_webhook_section();
+				$this->generate_webhook_section();
+				break;
+
+			case 'mapping':
+				$this->tpl_name = 'acp_discord_notifications_mapping';
+
+				if ($this->request->is_set_post('submit'))
+				{
+					$this->process_mapping_form_submit();
+				}
+
+				$this->generate_webhook_section();
+				$this->generate_forum_section();
+				break;
+
+			case 'settings':
+			default:
+				$this->tpl_name = 'acp_discord_notifications_settings';
+
+				if ($this->request->is_set_post('submit'))
+				{
+					$this->process_settings_form_submit();
+				}
+				break;
+		}
 
 		// Assign template values so that the page reflects the state of the extension settings
 		$this->template->assign_vars(array(
@@ -159,7 +182,7 @@ class discord_notifications_module
 	 */
 	private function process_send_test_message()
 	{
-		global $table_prefix;
+		global $table_prefix, $phpbb_container;
 
 		$webhook = $this->request->variable('dn_test_webhook', '', true);
 		$test_message = $this->request->variable('dn_test_message', '');
@@ -173,6 +196,8 @@ class discord_notifications_module
 		{
 			trigger_error($this->language->lang('DN_TEST_BAD_WEBHOOK') . adm_back_link($this->u_action), E_USER_WARNING);
 		}
+
+		$this->notification_service = $phpbb_container->get('mober.discordnotifications.notification_service');
 
 		$sql = "SELECT url FROM {$table_prefix}discord_webhooks WHERE alias = '" . $this->db->sql_escape($webhook) . "'";
 		$result = $this->db->sql_query($sql);
@@ -211,13 +236,8 @@ class discord_notifications_module
 		trigger_error($this->language->lang('DN_SETTINGS_SAVED') . adm_back_link($this->u_action));
 	}
 
-	/**
-	 * Handles all error checking and database changes when the user hits the submit button on the ACP page.
-	 */
-	private function process_form_submit()
+	private function process_settings_form_submit()
 	{
-		global $table_prefix;
-
 		if (!check_form_key(self::PAGE_FORM_NAME))
 		{
 			trigger_error('FORM_INVALID', E_USER_WARNING);
@@ -236,6 +256,31 @@ class discord_notifications_module
 		if ($preview_length != 0 && ($preview_length < self::MIN_POST_PREVIEW_LENGTH || $preview_length > self::MAX_POST_PREVIEW_LENGTH))
 		{
 			trigger_error($this->language->lang('DN_POST_PREVIEW_INVALID') . adm_back_link($this->u_action), E_USER_WARNING);
+		}
+
+		$connect_timeout = max(1, (int) $this->request->variable('dn_connect_to', 0));
+		$exec_timeout = max(1, (int) $this->request->variable('dn_exec_to', 0));
+
+		$this->config->set('discord_notifications_enabled', $master_enable);
+		$this->config->set('discord_notifications_post_preview_length', $preview_length);
+		$this->config->set('discord_notifications_connect_timeout', $connect_timeout);
+		$this->config->set('discord_notifications_exec_timeout', $exec_timeout);
+
+		// Log the settings change
+		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'ACP_DISCORD_NOTIFICATIONS_LOG_UPDATE');
+		// Destroy any cached discord notification data
+		$this->cache->destroy('mober_discord_notifications');
+
+		trigger_error($this->language->lang('DN_SETTINGS_SAVED') . adm_back_link($this->u_action));
+	}
+
+	private function process_webhooks_form_submit()
+	{
+		global $table_prefix;
+
+		if (!check_form_key(self::PAGE_FORM_NAME))
+		{
+			trigger_error('FORM_INVALID', E_USER_WARNING);
 		}
 
 		// Create new entry
@@ -267,35 +312,29 @@ class discord_notifications_module
 			$this->db->sql_query($sql);
 		}
 
+		// Log the settings change
+		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'ACP_DISCORD_NOTIFICATIONS_LOG_UPDATE');
+		// Destroy any cached discord notification data
+		$this->cache->destroy('mober_discord_notifications');
+
+		trigger_error($this->language->lang('DN_SETTINGS_SAVED') . adm_back_link($this->u_action));
+	}
+
+	private function process_mapping_form_submit()
+	{
+		if (!check_form_key(self::PAGE_FORM_NAME))
+		{
+			trigger_error('FORM_INVALID', E_USER_WARNING);
+		}
+
 		// Update configuration per forum
 		$forum_configuration = $this->request->variable('dn_forum', [0 => ''], true);
 		foreach ($forum_configuration as $id => $value)
 		{
-			// Don't update deleted entries
-			if ($value === '' || $webhook_configuration[$value] !== '')
-			{
-				$sql = "UPDATE " . FORUMS_TABLE . " SET discord_notifications = '" . $this->db->sql_escape($value) .
-					"' WHERE forum_id = " . (int) $id;
-				$this->db->sql_query($sql);
-			}
+			$sql = "UPDATE " . FORUMS_TABLE . " SET discord_notifications = '" . $this->db->sql_escape($value) .
+				"' WHERE forum_id = " . (int) $id;
+			$this->db->sql_query($sql);
 		}
-
-		$connect_timeout = (int) $this->request->variable('dn_connect_to', 0);
-		if ($connect_timeout < 1)
-		{
-			$connect_timeout = 1;
-		}
-
-		$exec_timeout = (int) $this->request->variable('dn_exec_to', 0);
-		if ($exec_timeout < 1)
-		{
-			$exec_timeout = 1;
-		}
-
-		$this->config->set('discord_notifications_enabled', $master_enable);
-		$this->config->set('discord_notifications_post_preview_length', $preview_length);
-		$this->config->set('discord_notifications_connect_timeout', $connect_timeout);
-		$this->config->set('discord_notifications_exec_timeout', $exec_timeout);
 
 		$this->config->set('discord_notification_type_post_create', $this->request->variable('dn_post_create', 0));
 		$this->config->set('discord_notification_type_post_update', $this->request->variable('dn_post_update', 0));
@@ -356,7 +395,7 @@ class discord_notifications_module
 
 		$sql = "SELECT forum_id, forum_type, forum_name, left_id, right_id, parent_id, forum_parents, discord_notifications
 			FROM " . FORUMS_TABLE . "
-			ORDER BY left_id ASC";
+			ORDER BY left_id";
 		$result = $this->db->sql_query($sql);
 
 		while ($row = $this->db->sql_fetchrow($result))
