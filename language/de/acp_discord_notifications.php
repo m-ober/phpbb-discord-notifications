@@ -80,7 +80,6 @@ $lang = array_merge($lang, array(
 
 	// Success/Failure messages that can be generated once the user saves
 	'DN_SETTINGS_SAVED'				=> 'Einstellungen aktualisiert.',
-	'DN_MASTER_WEBHOOK_REQUIRED'	=> 'Benachrichtigungen können nur aktiviert werden, wenn eine gültige Webhook-URL hinterlegt ist.',
 	'DN_WEBHOOK_URL_INVALID'		=> 'Die Webhook-URL ist ungültig. Bitte überprüfe die Konfiguration.',
 	'DN_POST_PREVIEW_INVALID'		=> 'Länge der Vorschau muss zwischen 10 und 2000 Zeichen sein (oder 0 zum Deaktivieren der Vorschau).',
 ));

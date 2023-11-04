@@ -80,7 +80,6 @@ $lang = array_merge($lang, array(
 
 	// Success/Failure messages that can be generated once the user saves
 	'DN_SETTINGS_SAVED'				=> 'Discord Notification settings modified successfully.',
-	'DN_MASTER_WEBHOOK_REQUIRED'	=> 'A valid Discord webhook URL is required to enable notifications.',
 	'DN_WEBHOOK_URL_INVALID'		=> 'Discord webhook URL must be a full and valid URL.',
 	'DN_POST_PREVIEW_INVALID'		=> 'Post preview length must be a number between 10 and 2000, or 0 to disable previews.',
 ));
