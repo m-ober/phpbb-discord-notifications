@@ -58,9 +58,13 @@ class discord_notifications_module
 	/** @var \phpbb\user */
 	protected $user;
 
+	/** @var bool */
+	private  $curl_available;
+
 	public function main($id, $mode)
 	{
 		global $phpbb_container;
+
 		$this->cache = $phpbb_container->get('cache.driver');
 		$this->config = $phpbb_container->get('config');
 		$this->db = $phpbb_container->get('dbal.conn');
@@ -69,6 +73,7 @@ class discord_notifications_module
 		$this->request = $phpbb_container->get('request');
 		$this->template = $phpbb_container->get('template');
 		$this->user = $phpbb_container->get('user');
+		$this->curl_available = extension_loaded('curl');
 
 		$this->language->add_lang('acp_discord_notifications', 'mober/discordnotifications');
 		$this->page_title = $this->language->lang('ACP_DISCORD_NOTIFICATIONS');
@@ -146,6 +151,7 @@ class discord_notifications_module
 
 			'DN_DEFAULT_WEBHOOK'		=> $this->config['discord_notification_default_webhook'],
 
+			'DN_CURL_AVAILABLE'			=> $this->curl_available,
 			'U_ACTION'					=> $this->u_action,
 		));
 	}
