@@ -290,20 +290,20 @@ class notification_service
 	 */
 	private function execute_discord_webhook($discord_webhook_url, $color, $message, $title = null, $preview = null, $footer = null)
 	{
-		if (isset($discord_webhook_url) == false || $discord_webhook_url === '')
+		if (!isset($discord_webhook_url) || $discord_webhook_url === '')
 		{
 			return false;
 		}
-		if (is_integer($color) == false || $color < 0)
+		if (!is_integer($color) || $color < 0)
 		{
 			// Use the default color if we did not receive a valid color value
 			$color = self::DEFAULT_COLOR;
 		}
-		if (is_string($message) == false || $message == '')
+		if (!is_string($message) || $message == '')
 		{
 			return false;
 		}
-		if (isset($footer) == true && (is_string($footer) == false || $footer == ''))
+		if (isset($footer) && (!is_string($footer) || $footer == ''))
 		{
 			return false;
 		}
