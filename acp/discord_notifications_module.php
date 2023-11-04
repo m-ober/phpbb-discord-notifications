@@ -49,9 +49,6 @@ class discord_notifications_module
 	/** @var \phpbb\log\log */
 	protected $log;
 
-	/** @var \mober\discordnotifications\notification_service */
-	protected $notification_service;
-
 	/** @var \phpbb\request\request */
 	protected $request;
 
@@ -72,7 +69,6 @@ class discord_notifications_module
 		$this->request = $phpbb_container->get('request');
 		$this->template = $phpbb_container->get('template');
 		$this->user = $phpbb_container->get('user');
-		// Used for sending test messages to Discord
 
 		$this->language->add_lang('acp_discord_notifications', 'mober/discordnotifications');
 		$this->page_title = $this->language->lang('ACP_DISCORD_NOTIFICATIONS');
@@ -197,14 +193,13 @@ class discord_notifications_module
 			trigger_error($this->language->lang('DN_TEST_BAD_WEBHOOK') . adm_back_link($this->u_action), E_USER_WARNING);
 		}
 
-		$this->notification_service = $phpbb_container->get('mober.discordnotifications.notification_service');
-
 		$sql = "SELECT url FROM {$table_prefix}discord_webhooks WHERE alias = '" . $this->db->sql_escape($webhook) . "'";
 		$result = $this->db->sql_query($sql);
 		$data = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
 
-		$result = $this->notification_service->force_send_discord_notification($data['url'], $test_message);
+		$notification_service = $phpbb_container->get('mober.discordnotifications.notification_service');
+		$result = $notification_service->force_send_discord_notification($data['url'], $test_message);
 		if ($result)
 		{
 			trigger_error($this->language->lang('DN_TEST_SUCCESS') . adm_back_link($this->u_action));
