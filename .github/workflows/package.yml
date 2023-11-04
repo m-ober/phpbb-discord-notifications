@@ -1,0 +1,33 @@
+name: Package
+
+on:
+    workflow_dispatch:
+    push:
+        tags:
+            - '*'
+
+jobs:
+    package:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Prepare build
+              run: |
+                  mkdir build
+
+            - uses: php-actions/composer@v6
+              with:
+                  php_version: 7.2
+
+            - name: Build
+              run: |
+                  vendor/bin/phing
+
+            - name: Release
+              uses: softprops/action-gh-release@v1
+              with:
+                  draft: true
+                  fail_on_unmatched_files: true
+                  files: build/upload/*.zip
