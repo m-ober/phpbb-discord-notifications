@@ -45,7 +45,6 @@ $lang = array_merge($lang, array(
 
 	'DN_MAIN_SETTINGS'				=> 'Paramètres généraux',
 	'DN_MASTER_ENABLE'				=> 'Activer les notifications Discord',
-	'DN_WEBHOOK_DESCRIPTION'		=> 'Permet de saisir l’adresse URL Webhook du serveur Discord généré par le serveur Discord. Voir <a href="https://support.discordapp.com/hc/fr/articles/228383668-Intro-to-Webhooks">cet article</a> pour apprendre comment créer un nouveau Webhook.',
 	'DN_POST_PREVIEW_LENGTH'		=> 'Longueur de l’aperçu des messages',
 	'DN_POST_PREVIEW_DESCRIPTION'	=> 'Permet de saisir le nombre de caractères à afficher dans l’aperçu des messages (10 - 2000). Définir sur la valeur 0 pour désactiver l’aperçu des messages.',
 	'DN_TEST_MESSAGE'				=> 'Message',
@@ -65,6 +64,7 @@ $lang = array_merge($lang, array(
 	'DN_WEBHOOK_NEW_DESCRIPTION'	=> 'Créez une nouvelle entrée. Une URL complète est requise, commençant par "http" ou "https".',
 	'DN_WEBHOOK_NEW_ALIAS'			=> 'Nouvel alias',
 	'DN_WEBHOOK_NEW_URL'			=> 'URL Webhook de Discord',
+	'DN_WEBHOOK_NEW_URL_DESCRIPTION'=> 'Permet de saisir l’adresse URL Webhook du serveur Discord généré par le serveur Discord. Voir <a href="https://support.discordapp.com/hc/fr/articles/228383668-Intro-to-Webhooks">cet article</a> pour apprendre comment créer un nouveau Webhook.',
 	'DN_WEBHOOK_SELECT'				=> 'Sélectionnez Webhook',
 	'DN_WEBHOOK_DEFAULT'			=> 'Événements mondiaux',
 	'DN_WEBHOOK_DEFAULT_DESCRIPTION' => 'Webhook pour les événements mondiaux non liés à un forum spécifique, par ex. création/suppression d‘utilisateur',

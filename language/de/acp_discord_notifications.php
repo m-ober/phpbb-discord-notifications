@@ -24,7 +24,6 @@ $lang = array_merge($lang, array(
 
 	'DN_MAIN_SETTINGS'				=> 'Konfiguration',
 	'DN_MASTER_ENABLE'				=> 'Discord Benachrichtigungen aktivieren',
-	'DN_WEBHOOK_DESCRIPTION'		=> 'Webhook für einen Discord-Kanal. Weitere Informationen gibt es in <a href="https://support.discordapp.com/hc/en-us/articles/228383668-Intro-to-Webhooks">diesem Artikel</a>.',
 	'DN_POST_PREVIEW_LENGTH'		=> 'Länge der Vorschau',
 	'DN_POST_PREVIEW_DESCRIPTION'	=> 'Wie viele Zeichen eines Posts sollen in der Vorschau angezeigt werden? (10-2000, 0 deaktiviert die Vorschau)',
 	'DN_TEST_MESSAGE'				=> 'Nachricht',
@@ -45,7 +44,7 @@ $lang = array_merge($lang, array(
 	'DN_WEBHOOK_NEW_ALIAS'			=> 'Neuer Alias',
 	'DN_WEBHOOK_NEW_ALIAS_DESCRIPTION' => 'Frei wählbar, z.B. der Names des Channels, auf den der Webhook zeigt (wie "öffentlich" or "marktplatz").',
 	'DN_WEBHOOK_NEW_URL'			=> 'Discord Webhook URL',
-	'DN_WEBHOOK_NEW_URL_DESCRIPTION' => 'Webhook-URL, muss mit http/https beginnen, z.B. <samp>https://discord.com/api/webhooks/1063...</samp>',
+	'DN_WEBHOOK_NEW_URL_DESCRIPTION'=> 'Webhook für einen Discord-Kanal. Weitere Informationen gibt es in <a href="https://support.discordapp.com/hc/en-us/articles/228383668-Intro-to-Webhooks">diesem Artikel</a>.',
 	'DN_WEBHOOK_SELECT'				=> 'Webhook auswählen',
 	'DN_WEBHOOK_DEFAULT'			=> 'Forenübergreifende Ereignisse',
 	'DN_WEBHOOK_DEFAULT_DESCRIPTION' => 'Webhook für Ereignisse, die nicht zu einem bestimmten Forum gehören (z.B. Benutzer erstellt/gelöscht)',
