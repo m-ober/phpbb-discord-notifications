@@ -63,6 +63,7 @@ $lang = array_merge($lang, array(
 	'DN_WEBHOOK_NEW'				=> 'Créer une nouvelle entrée',
 	'DN_WEBHOOK_NEW_DESCRIPTION'	=> 'Créez une nouvelle entrée. Une URL complète est requise, commençant par "http" ou "https".',
 	'DN_WEBHOOK_NEW_ALIAS'			=> 'Nouvel alias',
+	'DN_WEBHOOK_NEW_ALIAS_DESCRIPTION' => 'Can be freely chosen, for example something that describes the target channel of the webhook (like "public" or "marketplace").',
 	'DN_WEBHOOK_NEW_URL'			=> 'URL Webhook de Discord',
 	'DN_WEBHOOK_NEW_URL_DESCRIPTION'=> 'Permet de saisir l’adresse URL Webhook du serveur Discord généré par le serveur Discord. Voir <a href="https://support.discordapp.com/hc/fr/articles/228383668-Intro-to-Webhooks">cet article</a> pour apprendre comment créer un nouveau Webhook.',
 	'DN_WEBHOOK_SELECT'				=> 'Sélectionnez Webhook',
