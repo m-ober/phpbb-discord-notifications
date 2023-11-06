@@ -39,8 +39,8 @@ class notification_service
 	/**
 	 * Constructor
 	 *
-	 * @param \phpbb\config\config              $config
-	 * @param \phpbb\db\driver\driver_interface $db
+	 * @param \phpbb\config\config				$config
+	 * @param \phpbb\db\driver\driver_interface	$db
 	 */
 	public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\log\log $log)
 	{
@@ -108,6 +108,22 @@ class notification_service
 	public function get_post_preview_length()
 	{
 		return $this->config['discord_notifications_post_preview_length'];
+	}
+
+	/**
+	 * Add missing data to event by querying data by `post_id`
+	 * @param $event
+	 * @return void
+	 */
+	public function enrich_event_from_post_id(&$event)
+	{
+		$sql = "SELECT forum_id, topic_id from " . POSTS_TABLE . " WHERE post_id = " . (int) $event['post_id'];
+		$result = $this->db->sql_query($sql);
+		$data = $this->db->sql_fetchrow($result);
+		$this->db->sql_freeresult($result);
+
+		$event['forum_id'] = $data['forum_id'];
+		$event['topic_id'] = $data['topic_id'];
 	}
 
 	/**
@@ -222,10 +238,10 @@ class notification_service
 	 * but does no further checks. The caller is responsible for performing full validation of the notification prior
 	 * to calling this function.
 	 *
-	 * @param string      $color   The color to use in the notification (decimal value of a hexadecimal RGB code)
-	 * @param string      $message The message text to send.
-	 * @param null|string $webhook_url
-	 * @param null|string $footer  Text to place in the footer of the message. Optional.
+	 * @param string		$color		The color to use in the notification (decimal value of a hexadecimal RGB code)
+	 * @param string		$message	The message text to send.
+	 * @param null|string	$webhook_url
+	 * @param null|string	$footer		Text to place in the footer of the message. Optional.
 	 */
 	public function send_discord_notification($color, $message, $webhook_url = null, $title = null, $preview = null, $footer = null)
 	{
@@ -256,9 +272,9 @@ class notification_service
 	 * Sends a message to Discord, disregarding any configurations that are currently set. This method is primarily
 	 * used by users to test their notifications from the ACP.
 	 *
-	 * @param string $discord_webhook_url The URL of the Discord webhook to transmit the message to. If this is an
-	 *                                    invalid URL, no message will be sent.
-	 * @param string $message             The message text to send. Must be a non-empty string.
+	 * @param string	$discord_webhook_url	The URL of the Discord webhook to transmit the message to. If this is an
+	 *                                      invalid URL, no message will be sent.
+	 * @param string	$message				The message text to send. Must be a non-empty string.
 	 * @return bool indicating whether the message transmission resulted in success or failure.
 	 */
 	public function force_send_discord_notification($discord_webhook_url, $message)
@@ -277,16 +293,16 @@ class notification_service
 	 * allowable limits by the Discord API, but it does -not- check configuration settings such as the
 	 * post_preview_length. The code invoking this method is responsible for checking those settings.
 	 *
-	 * @param string      $discord_webhook_url The URL of the Discord webhook to transmit the message to.
-	 * @param string      $color               Color to set for the message. Should be a positive non-zero integer
-	 *                                         representing a hex color code.
-	 * @param string      $message             The message text to send. Must be a non-empty string.
-	 * @param string      $title               Title of the preview (for example "Preview" or "Reason"). Optional.
-	 * @param string      $preview             Content of the preview. Optional.
-	 * @param string      $footer              The text to place in the footer. Optional.
+	 * @param string		$discord_webhook_url	The URL of the Discord webhook to transmit the message to.
+	 * @param string		$color					Color to set for the message. Should be a positive non-zero integer
+	 *                                          representing a hex color code.
+	 * @param string		$message				The message text to send. Must be a non-empty string.
+	 * @param string		$title					Title of the preview (for example "Preview" or "Reason"). Optional.
+	 * @param string		$preview				Content of the preview. Optional.
+	 * @param string		$footer					The text to place in the footer. Optional.
 	 * @return bool indicating whether the message transmission resulted in success or failure.
-	 * @see https://discordapp.com/developers/docs/resources/webhook#execute-webhook
-	 * @see https://discord.com/developers/docs/resources/channel#embed-object
+	 * @see	https://discordapp.com/developers/docs/resources/webhook#execute-webhook
+	 * @see	https://discord.com/developers/docs/resources/channel#embed-object
 	 */
 	private function execute_discord_webhook($discord_webhook_url, $color, $message, $title = null, $preview = null, $footer = null)
 	{
@@ -346,8 +362,8 @@ class notification_service
 
 		if (isset($footer))
 		{
-			$embed['footer'] = [
-				'text' => $footer,
+            $embed['footer'] = [
+                'text' => $footer,
 			];
 		}
 
@@ -357,8 +373,8 @@ class notification_service
 			$preview = trim($preview);
 			if ($title !== '' && $preview !== '')
 			{
-				$embed['fields'] = [
-					[
+                $embed['fields'] = [
+                    [
 						'name'		=> $title,
 						'value'		=> $preview,
 						'inline'	=> false,
@@ -368,7 +384,7 @@ class notification_service
 		}
 
 		$payload = [
-			'embeds' => [$embed],
+            'embeds' => [$embed],
 		];
 
 		$json = \json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);

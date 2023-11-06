@@ -67,6 +67,8 @@ $lang = array_merge($lang, array(
 	'DN_TOPIC_APPROVE'				=> 'Thema freigegeben',
 	'DN_USER_CREATE'				=> 'Benutzer erstellt',
 	'DN_USER_DELETE'				=> 'Benutzer gelöscht',
+	'DN_TOPIC_REACTION'				=> 'Reaktion auf Beitrag',
+	'DN_TOPIC_REACTION_DESCRIPTION'	=> 'Diese Option funktioniert nur mit installierter <em>cBB Reactions</em> Erweiterung.',
 
 	'DN_FORUM_SETTINGS'				=> 'Forenspezifische Konfiguration',
 	'DN_FORUM_DESCRIPTION'			=> 'Wähle aus, für welche Foren Benachrichtigungen (neues Thema, Antwort, ...) ausgelöst werden sollen.',

@@ -96,9 +96,9 @@
 				<label><input type="radio" class="radio" name="dn_topic_unlock" value="0" {% if not DN_TOPIC_UNLOCK %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
 		</dl>
 		<dl>
-			<dt><label>{{ lang('DN_TOPIC_APPROVE') }}{{ lang('COLON') }}</label></dt>
-			<dd><label><input type="radio" class="radio" name="dn_topic_approve" value="1" {% if DN_TOPIC_APPROVE %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
-				<label><input type="radio" class="radio" name="dn_topic_approve" value="0" {% if not DN_TOPIC_APPROVE %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
+			<dt><label>{{ lang('DN_TOPIC_REACTION') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_TOPIC_REACTION_DESCRIPTION') }}</span></dt>
+			<dd><label><input type="radio" class="radio" name="dn_topic_reaction" value="1" {% if DN_TOPIC_REACTION %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
+				<label><input type="radio" class="radio" name="dn_topic_reaction" value="0" {% if not DN_TOPIC_REACTION %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
 		</dl>
 	</fieldset>
 

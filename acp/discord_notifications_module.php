@@ -149,6 +149,8 @@ class discord_notifications_module
 			'DN_USER_CREATE'			=> $this->config['discord_notification_type_user_create'],
 			'DN_USER_DELETE'			=> $this->config['discord_notification_type_user_delete'],
 
+			'DN_TOPIC_REACTION'			=> $this->config['discord_notification_type_reaction'],
+
 			'DN_DEFAULT_WEBHOOK'		=> $this->config['discord_notification_default_webhook'],
 
 			'DN_CURL_AVAILABLE'			=> $this->curl_available,
@@ -343,6 +345,8 @@ class discord_notifications_module
 
 		$this->config->set('discord_notification_type_user_create', $this->request->variable('dn_user_create', 0));
 		$this->config->set('discord_notification_type_user_delete', $this->request->variable('dn_user_delete', 0));
+
+		$this->config->set('discord_notification_type_reaction', $this->request->variable('dn_topic_reaction', 0));
 
 		$this->config->set('discord_notification_default_webhook', $this->request->variable('dn_webhook_default', '', true));
 

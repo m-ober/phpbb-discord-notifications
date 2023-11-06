@@ -27,6 +27,7 @@ $lang = array_merge($lang, array(
 	'LOCK_POST'					=> '%1$s Eine %2$s von %3$s auf das Thema %4$s im Forum %5$s wurde gesperrt.', // %s == emoji, post, user, topic, forum
 	'UNLOCK_POST'				=> '%1$s Eine %2$s von %3$s auf das Thema %4$s im Forum %5$s wurde entsperrt.', // %s == emoji, post, user, topic, forum
 	'APPROVE_POST'				=> '%1$s Eine %2$s von %3$s auf das Thema %4$s im Forum %5$s wurde freigeschaltet.', // %s == emoji, post, user, topic, forum
+	'REACTION_POST'				=> '%1$s %2$s hat auf den %3$s reagiert.', // %s == emoji, user, post, forum
 
 	// Topic Notifications
 	'CREATE_TOPIC'				=> '%1$s %2$s hat das Thema %3$s im Forum %4$s erstellt.', // %s == emoji, user, topic, forum
