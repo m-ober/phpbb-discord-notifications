@@ -400,7 +400,8 @@ class notification_service
 				$this->log->add('admin', ANONYMOUS, '127.0.0.1', 'ACP_DISCORD_NOTIFICATIONS_WEBHOOK_ERROR', time(), [$status]);
 				return false;
 			}
-		} else
+		}
+		else
 		{
 			$this->log->add('admin', ANONYMOUS, '127.0.0.1', 'ACP_DISCORD_NOTIFICATIONS_CURL_ERROR', time(), [$error]);
 			return false;
