@@ -182,7 +182,7 @@ class notification_service
 	{
 		if (!is_numeric($topic_id))
 		{
-			return array();
+			return [];
 		}
 
 		$sql = "SELECT
@@ -339,14 +339,16 @@ class notification_service
 		// Place the message inside the JSON structure that Discord expects to receive at the REST endpoint.
 
 		$embed = [
-			'timestamp'   => date('c', time()),
-			'color'       => $color,
-			'description' => $message
+			'timestamp'		=> date('c', time()),
+			'color'			=> $color,
+			'description'	=> $message,
 		];
 
 		if (isset($footer))
 		{
-			$embed["footer"] = ["text" => $footer];
+			$embed['footer'] = [
+				'text' => $footer,
+			];
 		}
 
 		if (isset($title) && isset($preview))
@@ -357,16 +359,16 @@ class notification_service
 			{
 				$embed['fields'] = [
 					[
-						'name'   => $title,
-						'value'  => $preview,
-						'inline' => false
-					]
+						'name'		=> $title,
+						'value'		=> $preview,
+						'inline'	=> false,
+					],
 				];
 			}
 		}
 
 		$payload = [
-			'embeds' => [$embed]
+			'embeds' => [$embed],
 		];
 
 		$json = \json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
@@ -378,7 +380,7 @@ class notification_service
 
 		// Use the CURL library to transmit the message via a POST operation to the webhook URL.
 		$h = curl_init();
-		curl_setopt($h, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
+		curl_setopt($h, CURLOPT_HTTPHEADER, ['Content-type: application/json']);
 		curl_setopt($h, CURLOPT_URL, $discord_webhook_url);
 		curl_setopt($h, CURLOPT_POST, 1);
 		curl_setopt($h, CURLOPT_POSTFIELDS, $json);

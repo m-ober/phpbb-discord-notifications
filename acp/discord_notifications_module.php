@@ -125,7 +125,7 @@ class discord_notifications_module
 		}
 
 		// Assign template values so that the page reflects the state of the extension settings
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'DN_MASTER_ENABLE'			=> $this->config['discord_notifications_enabled'],
 			'DN_POST_PREVIEW_LENGTH'	=> $this->config['discord_notifications_post_preview_length'],
 			'DN_TEST_MESSAGE_TEXT'		=> $this->language->lang('DN_TEST_MESSAGE_TEXT'),
@@ -153,7 +153,7 @@ class discord_notifications_module
 
 			'DN_CURL_AVAILABLE'			=> $this->curl_available,
 			'U_ACTION'					=> $this->u_action,
-		));
+		]);
 	}
 
 	/**
@@ -363,10 +363,10 @@ class discord_notifications_module
 
 		while ($row = $this->db->sql_fetchrow($result))
 		{
-			$tpl_row = array(
+			$tpl_row = [
 				'ALIAS'	=> $row['alias'],
 				'URL'	=> $row['url'],
-			);
+			];
 			$this->template->assign_block_vars('webhookrow', $tpl_row);
 		}
 		$this->db->sql_freeresult($result);
@@ -394,23 +394,23 @@ class discord_notifications_module
 			// Category forums are displayed for organizational purposes, but have no configuration
 			if ($row['forum_type'] == FORUM_CAT)
 			{
-				$tpl_row = array(
+				$tpl_row = [
 					'S_IS_CAT'		=> true,
 					'FORUM_NAME'	=> $row['forum_name'],
-					'PARENTS'	=> '',
-				);
+					'PARENTS'		=> '',
+				];
 				$this->template->assign_block_vars('forumrow', $tpl_row);
 			}
 			else if ($row['forum_type'] == FORUM_POST)
 			{
 				// The labels for all the inputs are constructed based on the forum IDs to make it easy to know which
-				$tpl_row = array(
-							'S_IS_CAT'		=> false,
-							'FORUM_NAME'	=> $row['forum_name'],
-							'FORUM_ID'		=> $row['forum_id'],
-							'ALIAS'			=> $row['discord_notifications'],
-							'PARENTS'		=> '',
-						);
+				$tpl_row = [
+					'S_IS_CAT'		=> false,
+					'FORUM_NAME'	=> $row['forum_name'],
+					'FORUM_ID'		=> $row['forum_id'],
+					'ALIAS'			=> $row['discord_notifications'],
+					'PARENTS'		=> '',
+				];
 				$parents = get_forum_parents($row);
 				if (is_array($parents))
 				{
