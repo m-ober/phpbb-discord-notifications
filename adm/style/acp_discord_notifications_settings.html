@@ -1,0 +1,49 @@
+{% include 'overall_header.html' %}
+
+<h1>{{ lang('ACP_DISCORD_NOTIFICATIONS') }}</h1>
+
+<p>{{ lang('DN_ACP_DESCRIPTION') }}</p>
+
+{% if not DN_CURL_AVAILABLE %}
+	<div class="errorbox">
+		<p>{{ lang('DN_MISSING_CURL') }}</p>
+	</div>
+{% endif %}
+
+<form id="acp_board" method="post" action="{{ U_ACTION }}">
+
+	<fieldset>
+		<legend>{{ lang('DN_MAIN_SETTINGS') }}</legend>
+		<dl>
+			<dt><label>{{ lang('DN_MASTER_ENABLE') }}{{ lang('COLON') }}</label></dt>
+			<dd><label><input type="radio" class="radio" name="dn_master_enable" value="1" {% if DN_MASTER_ENABLE %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
+				<label><input type="radio" class="radio" name="dn_master_enable" value="0" {% if not DN_MASTER_ENABLE %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
+		</dl>
+		<dl>
+			<dt><label for="dn_post_preview_length">{{ lang('DN_POST_PREVIEW_LENGTH') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_POST_PREVIEW_DESCRIPTION') }}</span></dt>
+			<dd>
+				<input id="dn_post_preview_length" name="dn_post_preview_length" type="text" value="{{ DN_POST_PREVIEW_LENGTH }}" size="4" maxlength="4" />
+			</dd>
+		</dl>
+		<dl>
+			<dt><label for="dn_connect_to">{{ lang('DN_CONNECT_TIMEOUT') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_CONNECT_TO_DESCRIPTION') }}</span></dt>
+			<dd>
+				<input id="dn_connect_to" name="dn_connect_to" type="text" value="{{ DN_CONNECT_TIMEOUT }}" size="4" maxlength="4" />
+			</dd>
+		</dl>
+		<dl>
+			<dt><label for="dn_exec_to">{{ lang('DN_EXEC_TIMEOUT') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_EXEC_TO_DESCRIPTION') }}</span></dt>
+			<dd>
+				<input id="dn_exec_to" name="dn_exec_to" type="text" value="{{ DN_EXEC_TIMEOUT }}" size="4" maxlength="4" />
+			</dd>
+		</dl>
+	</fieldset>
+
+	<fieldset class="submit-buttons">
+		<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}" />&nbsp;
+		{{ S_FORM_TOKEN }}
+	</fieldset>
+
+</form>
+
+{% include 'overall_footer.html' %}

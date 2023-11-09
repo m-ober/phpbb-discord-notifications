@@ -21,6 +21,7 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	// ACP Extension Settings Page
 	'DN_ACP_DESCRIPTION'			=> 'Diese Einstellungen erlauben es, bei verschiedenen Ereignissen eine Benachrichtigung an einen Discord-Kanal zu schicken.',
+	'DN_MISSING_CURL'				=> 'Damit diese Erweiterung funktioniert, musst du das <a href="https://www.php.net/manual/de/curl.installation.php">ext-curl Modul für PHP installieren.</a>',
 
 	'DN_MAIN_SETTINGS'				=> 'Konfiguration',
 	'DN_MASTER_ENABLE'				=> 'Discord Benachrichtigungen aktivieren',
@@ -44,7 +45,7 @@ $lang = array_merge($lang, array(
 	'DN_WEBHOOK_NEW_ALIAS'			=> 'Neuer Alias',
 	'DN_WEBHOOK_NEW_ALIAS_DESCRIPTION' => 'Frei wählbar, z.B. der Names des Channels, auf den der Webhook zeigt (wie "öffentlich" or "marktplatz").',
 	'DN_WEBHOOK_NEW_URL'			=> 'Discord Webhook URL',
-	'DN_WEBHOOK_NEW_URL_DESCRIPTION'=> 'Webhook für einen Discord-Kanal. Weitere Informationen gibt es in <a href="https://support.discordapp.com/hc/en-us/articles/228383668-Intro-to-Webhooks">diesem Artikel</a>.',
+	'DN_WEBHOOK_NEW_URL_DESCRIPTION'=> 'Webhook für einen Discord-Kanal. Weitere Informationen gibt es in <a href="https://support.discord.com/hc/de/articles/228383668-Einleitung-in-Webhooks">diesem Artikel</a>.',
 	'DN_WEBHOOK_SELECT'				=> 'Webhook auswählen',
 	'DN_WEBHOOK_DEFAULT'			=> 'Forenübergreifende Ereignisse',
 	'DN_WEBHOOK_DEFAULT_DESCRIPTION' => 'Webhook für Ereignisse, die nicht zu einem bestimmten Forum gehören (z.B. Benutzer erstellt/gelöscht)',

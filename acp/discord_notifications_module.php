@@ -49,9 +49,6 @@ class discord_notifications_module
 	/** @var \phpbb\log\log */
 	protected $log;
 
-	/** @var \mober\discordnotifications\notification_service */
-	protected $notification_service;
-
 	/** @var \phpbb\request\request */
 	protected $request;
 
@@ -61,9 +58,13 @@ class discord_notifications_module
 	/** @var \phpbb\user */
 	protected $user;
 
+	/** @var bool */
+	private  $curl_available;
+
 	public function main($id, $mode)
 	{
 		global $phpbb_container;
+
 		$this->cache = $phpbb_container->get('cache.driver');
 		$this->config = $phpbb_container->get('config');
 		$this->db = $phpbb_container->get('dbal.conn');
@@ -72,36 +73,59 @@ class discord_notifications_module
 		$this->request = $phpbb_container->get('request');
 		$this->template = $phpbb_container->get('template');
 		$this->user = $phpbb_container->get('user');
-		// Used for sending test messages to Discord
-		$this->notification_service = $phpbb_container->get('mober.discordnotifications.notification_service');
+		$this->curl_available = extension_loaded('curl');
 
 		$this->language->add_lang('acp_discord_notifications', 'mober/discordnotifications');
-		$this->tpl_name = 'acp_discord_notifications';
-		$this->page_title = $this->language->lang('ACP_DISCORD_NOTIFICATIONS_TITLE');
+		$this->page_title = $this->language->lang('ACP_DISCORD_NOTIFICATIONS');
 
 		add_form_key(self::PAGE_FORM_NAME);
 
-		// Process submit actions
-		if ($this->request->is_set_post('action_send_test_message'))
+		switch ($mode)
 		{
-			$this->process_send_test_message();
-		}
-		else if ($this->request->is_set_post('action_delete_alias'))
-		{
-			$this->process_delete_alias();
-		}
-		else if ($this->request->is_set_post('submit'))
-		{
-			$this->process_form_submit();
-		}
+			case 'webhooks':
+				$this->tpl_name = 'acp_discord_notifications_webhooks';
 
-		// Generate the dynamic HTML content for enabling/disabling forum notifications
-		$this->generate_forum_section();
+				if ($this->request->is_set_post('action_send_test_message'))
+				{
+					$this->process_send_test_message();
+				}
+				else if ($this->request->is_set_post('action_delete_alias'))
+				{
+					$this->process_delete_alias();
+				}
+				else if ($this->request->is_set_post('submit'))
+				{
+					$this->process_webhooks_form_submit();
+				}
 
-		$this->generate_webhook_section();
+				$this->generate_webhook_section();
+				break;
+
+			case 'mapping':
+				$this->tpl_name = 'acp_discord_notifications_mapping';
+
+				if ($this->request->is_set_post('submit'))
+				{
+					$this->process_mapping_form_submit();
+				}
+
+				$this->generate_webhook_section();
+				$this->generate_forum_section();
+				break;
+
+			case 'settings':
+			default:
+				$this->tpl_name = 'acp_discord_notifications_settings';
+
+				if ($this->request->is_set_post('submit'))
+				{
+					$this->process_settings_form_submit();
+				}
+				break;
+		}
 
 		// Assign template values so that the page reflects the state of the extension settings
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'DN_MASTER_ENABLE'			=> $this->config['discord_notifications_enabled'],
 			'DN_POST_PREVIEW_LENGTH'	=> $this->config['discord_notifications_post_preview_length'],
 			'DN_TEST_MESSAGE_TEXT'		=> $this->language->lang('DN_TEST_MESSAGE_TEXT'),
@@ -127,8 +151,9 @@ class discord_notifications_module
 
 			'DN_DEFAULT_WEBHOOK'		=> $this->config['discord_notification_default_webhook'],
 
+			'DN_CURL_AVAILABLE'			=> $this->curl_available,
 			'U_ACTION'					=> $this->u_action,
-		));
+		]);
 	}
 
 	/**
@@ -159,7 +184,9 @@ class discord_notifications_module
 	 */
 	private function process_send_test_message()
 	{
-		global $table_prefix;
+		global $table_prefix, $phpbb_container;
+
+		$this->validate_post_request();
 
 		$webhook = $this->request->variable('dn_test_webhook', '', true);
 		$test_message = $this->request->variable('dn_test_message', '');
@@ -179,7 +206,8 @@ class discord_notifications_module
 		$data = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
 
-		$result = $this->notification_service->force_send_discord_notification($data['url'], $test_message);
+		$notification_service = $phpbb_container->get('mober.discordnotifications.notification_service');
+		$result = $notification_service->force_send_discord_notification($data['url'], $test_message);
 		if ($result)
 		{
 			trigger_error($this->language->lang('DN_TEST_SUCCESS') . adm_back_link($this->u_action));
@@ -194,10 +222,7 @@ class discord_notifications_module
 	{
 		global $table_prefix;
 
-		if (!check_form_key(self::PAGE_FORM_NAME))
-		{
-			trigger_error('FORM_INVALID', E_USER_WARNING);
-		}
+		$this->validate_post_request();
 
 		$delete_alias = $this->request->variable('action_delete_alias',  ['' => ''], true);
 		foreach ($delete_alias as $alias => $url)
@@ -211,17 +236,9 @@ class discord_notifications_module
 		trigger_error($this->language->lang('DN_SETTINGS_SAVED') . adm_back_link($this->u_action));
 	}
 
-	/**
-	 * Handles all error checking and database changes when the user hits the submit button on the ACP page.
-	 */
-	private function process_form_submit()
+	private function process_settings_form_submit()
 	{
-		global $table_prefix;
-
-		if (!check_form_key(self::PAGE_FORM_NAME))
-		{
-			trigger_error('FORM_INVALID', E_USER_WARNING);
-		}
+		$this->validate_post_request();
 
 		// Get form values for the main settings
 		$master_enable = $this->request->variable('dn_master_enable', 0);
@@ -237,6 +254,28 @@ class discord_notifications_module
 		{
 			trigger_error($this->language->lang('DN_POST_PREVIEW_INVALID') . adm_back_link($this->u_action), E_USER_WARNING);
 		}
+
+		$connect_timeout = max(1, (int) $this->request->variable('dn_connect_to', 0));
+		$exec_timeout = max(1, (int) $this->request->variable('dn_exec_to', 0));
+
+		$this->config->set('discord_notifications_enabled', $master_enable);
+		$this->config->set('discord_notifications_post_preview_length', $preview_length);
+		$this->config->set('discord_notifications_connect_timeout', $connect_timeout);
+		$this->config->set('discord_notifications_exec_timeout', $exec_timeout);
+
+		// Log the settings change
+		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'ACP_DISCORD_NOTIFICATIONS_LOG_UPDATE');
+		// Destroy any cached discord notification data
+		$this->cache->destroy('mober_discord_notifications');
+
+		trigger_error($this->language->lang('DN_SETTINGS_SAVED') . adm_back_link($this->u_action));
+	}
+
+	private function process_webhooks_form_submit()
+	{
+		global $table_prefix;
+
+		$this->validate_post_request();
 
 		// Create new entry
 		$new_alias = $this->request->variable('dn_webhook_new_alias', '', true);
@@ -267,35 +306,26 @@ class discord_notifications_module
 			$this->db->sql_query($sql);
 		}
 
+		// Log the settings change
+		$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'ACP_DISCORD_NOTIFICATIONS_LOG_UPDATE');
+		// Destroy any cached discord notification data
+		$this->cache->destroy('mober_discord_notifications');
+
+		trigger_error($this->language->lang('DN_SETTINGS_SAVED') . adm_back_link($this->u_action));
+	}
+
+	private function process_mapping_form_submit()
+	{
+		$this->validate_post_request();
+
 		// Update configuration per forum
 		$forum_configuration = $this->request->variable('dn_forum', [0 => ''], true);
 		foreach ($forum_configuration as $id => $value)
 		{
-			// Don't update deleted entries
-			if ($value === '' || $webhook_configuration[$value] !== '')
-			{
-				$sql = "UPDATE " . FORUMS_TABLE . " SET discord_notifications = '" . $this->db->sql_escape($value) .
-					"' WHERE forum_id = " . (int) $id;
-				$this->db->sql_query($sql);
-			}
+			$sql = "UPDATE " . FORUMS_TABLE . " SET discord_notifications = '" . $this->db->sql_escape($value) .
+				"' WHERE forum_id = " . (int) $id;
+			$this->db->sql_query($sql);
 		}
-
-		$connect_timeout = (int) $this->request->variable('dn_connect_to', 0);
-		if ($connect_timeout < 1)
-		{
-			$connect_timeout = 1;
-		}
-
-		$exec_timeout = (int) $this->request->variable('dn_exec_to', 0);
-		if ($exec_timeout < 1)
-		{
-			$exec_timeout = 1;
-		}
-
-		$this->config->set('discord_notifications_enabled', $master_enable);
-		$this->config->set('discord_notifications_post_preview_length', $preview_length);
-		$this->config->set('discord_notifications_connect_timeout', $connect_timeout);
-		$this->config->set('discord_notifications_exec_timeout', $exec_timeout);
 
 		$this->config->set('discord_notification_type_post_create', $this->request->variable('dn_post_create', 0));
 		$this->config->set('discord_notification_type_post_update', $this->request->variable('dn_post_update', 0));
@@ -333,10 +363,10 @@ class discord_notifications_module
 
 		while ($row = $this->db->sql_fetchrow($result))
 		{
-			$tpl_row = array(
+			$tpl_row = [
 				'ALIAS'	=> $row['alias'],
 				'URL'	=> $row['url'],
-			);
+			];
 			$this->template->assign_block_vars('webhookrow', $tpl_row);
 		}
 		$this->db->sql_freeresult($result);
@@ -356,7 +386,7 @@ class discord_notifications_module
 
 		$sql = "SELECT forum_id, forum_type, forum_name, left_id, right_id, parent_id, forum_parents, discord_notifications
 			FROM " . FORUMS_TABLE . "
-			ORDER BY left_id ASC";
+			ORDER BY left_id";
 		$result = $this->db->sql_query($sql);
 
 		while ($row = $this->db->sql_fetchrow($result))
@@ -364,23 +394,23 @@ class discord_notifications_module
 			// Category forums are displayed for organizational purposes, but have no configuration
 			if ($row['forum_type'] == FORUM_CAT)
 			{
-				$tpl_row = array(
+				$tpl_row = [
 					'S_IS_CAT'		=> true,
 					'FORUM_NAME'	=> $row['forum_name'],
-					'PARENTS'	=> '',
-				);
+					'PARENTS'		=> '',
+				];
 				$this->template->assign_block_vars('forumrow', $tpl_row);
 			}
 			else if ($row['forum_type'] == FORUM_POST)
 			{
 				// The labels for all the inputs are constructed based on the forum IDs to make it easy to know which
-				$tpl_row = array(
-							'S_IS_CAT'		=> false,
-							'FORUM_NAME'	=> $row['forum_name'],
-							'FORUM_ID'		=> $row['forum_id'],
-							'ALIAS'			=> $row['discord_notifications'],
-							'PARENTS'		=> '',
-						);
+				$tpl_row = [
+					'S_IS_CAT'		=> false,
+					'FORUM_NAME'	=> $row['forum_name'],
+					'FORUM_ID'		=> $row['forum_id'],
+					'ALIAS'			=> $row['discord_notifications'],
+					'PARENTS'		=> '',
+				];
 				$parents = get_forum_parents($row);
 				if (is_array($parents))
 				{
@@ -394,5 +424,13 @@ class discord_notifications_module
 			// Other forum types (links) are ignored
 		}
 		$this->db->sql_freeresult($result);
+	}
+
+	private function validate_post_request()
+	{
+		if (!check_form_key(self::PAGE_FORM_NAME))
+		{
+			trigger_error($this->language->lang('FORM_INVALID') . adm_back_link($this->u_action), E_USER_WARNING);
+		}
 	}
 }

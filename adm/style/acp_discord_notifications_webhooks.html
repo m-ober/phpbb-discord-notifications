@@ -1,0 +1,86 @@
+{% include 'overall_header.html' %}
+
+<h1>{{ lang('ACP_DISCORD_NOTIFICATIONS') }}</h1>
+
+<p>{{ lang('DN_ACP_DESCRIPTION') }}</p>
+
+{% if not DN_CURL_AVAILABLE %}
+	<div class="errorbox">
+		<p>{{ lang('DN_MISSING_CURL') }}</p>
+	</div>
+{% endif %}
+
+<form id="acp_board" method="post" action="{{ U_ACTION }}">
+
+	<fieldset>
+		<legend>{{ lang('DN_WEBHOOK_SETTINGS') }}</legend>
+		<p>{{ lang('DN_WEBHOOK_SETTINGS_DESCRIPTION') }}</p>
+		{% if loops.webhookrow %}
+			{% for webhook in loops.webhookrow %}
+				<dl>
+					<dt><label for="dn_webhook_{{ webhook.ALIAS }}">{{ webhook.ALIAS }}</label></dt>
+					<dd>
+						<input type="text" size="100" maxlength="255" id="dn_webhook_{{ webhook.ALIAS }}" name="dn_webhook[{{ webhook.ALIAS }}]" value="{{ webhook.URL }}" />
+						<input type="submit" name="action_delete_alias[{{ webhook.ALIAS }}]" value="{{ lang('DELETE') }}" class="button2" onclick="return confirm('{{ lang('CONFIRM_OPERATION') }}');">
+					</dd>
+				</dl>
+			{% endfor %}
+		{% else %}
+			<p><strong>{{ lang('DN_NO_WEBHOOKS') }}</strong></p>
+		{% endif %}
+	</fieldset>
+
+	<fieldset>
+		<legend>{{ lang('DN_WEBHOOK_NEW') }}</legend>
+		<p>{{ lang('DN_WEBHOOK_NEW_DESCRIPTION') }}</p>
+		<dl>
+			<dt><label for="dn_webhook_new_alias">{{ lang('DN_WEBHOOK_NEW_ALIAS') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_WEBHOOK_NEW_ALIAS_DESCRIPTION') }}</span></dt>
+			<dd>
+				<input id="dn_webhook_new_alias" name="dn_webhook_new_alias" type="text" value="" size="100" maxlength="255" />
+			</dd>
+		</dl>
+		<dl>
+			<dt><label for="dn_webhook_new_url">{{ lang('DN_WEBHOOK_NEW_URL') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_WEBHOOK_NEW_URL_DESCRIPTION') }}</span></dt>
+			<dd>
+				<input id="dn_webhook_new_url" name="dn_webhook_new_url" type="text" value="" size="100" maxlength="255" />
+			</dd>
+		</dl>
+	</fieldset>
+
+	<fieldset>
+		<legend>{{ lang('DN_TEST_SETTINGS') }}</legend>
+		{% if loops.webhookrow %}
+		<dl>
+			<dt><label for="dn_test_message">{{ lang('DN_TEST_MESSAGE') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_TEST_DESCRIPTION') }}</span></dt>
+			<dd>
+				<input id="dn_test_message" name="dn_test_message" type="text" value="{{ DN_TEST_MESSAGE_TEXT }}" size="100" maxlength="255" />
+			</dd>
+		</dl>
+		<dl>
+			<dt><label for="dn_test_webhook">{{ lang('DN_WEBHOOK_SELECT') }}{{ lang('COLON') }}</label><br /></dt>
+			<dd>
+				<select id="dn_test_webhook" name="dn_test_webhook">
+					<option value="">{{ lang('DN_WEBHOOK_SELECT') }}</option>
+					{% for webhook in loops.webhookrow %}
+					<option value="{{ webhook.ALIAS }}"{% if forumrow.ALIAS == webhook.ALIAS %} selected{% endif %}>{{ webhook.ALIAS }}</option>
+					{% endfor %}
+				</select>
+			</dd>
+		</dl>
+		<dl>
+			<dt><label for="action_send_test_message">{{ lang('DN_SEND_TEST') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_SEND_TEST_DESCRIPTION') }}</span></dt>
+			<dd><input class="button2" type="submit" id="action_send_test_message" name="action_send_test_message" value="{{ lang('DN_SEND_TEST') }}" /></dd>
+		</dl>
+		{% else %}
+		<p><strong>{{ lang('DN_NO_WEBHOOKS') }}</strong></p>
+		{% endif %}
+	</fieldset>
+
+	<fieldset class="submit-buttons">
+		<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}" />&nbsp;
+		{{ S_FORM_TOKEN }}
+	</fieldset>
+
+</form>
+
+{% include 'overall_footer.html' %}

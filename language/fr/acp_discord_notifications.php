@@ -42,6 +42,7 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	// ACP Extension Settings Page
 	'DN_ACP_DESCRIPTION'			=> 'Depuis cette page il est possible de définir les paramètres permettant à différents évènements du forum d’être envoyés comme notification sur un serveur Discord.',
+	'DN_MISSING_CURL'				=> 'Pour que cette extension fonctionne, tu dois installer le module <a href="https://www.php.net/manual/fr/curl.installation.php">ext-curl pour PHP</a>.',
 
 	'DN_MAIN_SETTINGS'				=> 'Paramètres généraux',
 	'DN_MASTER_ENABLE'				=> 'Activer les notifications Discord',

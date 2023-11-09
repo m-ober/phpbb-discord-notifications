@@ -2,8 +2,8 @@
 /**
  * Discord Notifications extension for the phpBB Forum Software package.
  *
- * @copyright (c) 2018, Tyler Olsen, https://github.com/rootslinux
- * @license GNU General Public License, version 2 (GPL-2.0)
+ * @copyright (c)	2018, Tyler Olsen, https://github.com/rootslinux
+ * @license			GNU General Public License, version 2 (GPL-2.0)
  */
 
 namespace mober\discordnotifications\acp;
@@ -15,16 +15,26 @@ class discord_notifications_info
 {
 	public function module()
 	{
-		return array(
+		return [
 			'filename'	=> '\mober\discordnotifications\acp\discord_notifications_module',
 			'title'		=> 'ACP_DISCORD_NOTIFICATIONS',
-			'modes'		=> array(
-				'settings'	=> array(
-					'title'	=> 'ACP_DISCORD_NOTIFICATIONS_TITLE',
+			'modes'		=> [
+				'settings'	=> [
+					'title'	=> 'ACP_DISCORD_NOTIFICATIONS_SETTINGS',
 					'auth'	=> 'ext_mober/discordnotifications && acl_a_board',
-					'cat'	=> array('ACP_DISCORD_NOTIFICATIONS')
-				),
-			),
-		);
+					'cat'	=> ['ACP_DISCORD_NOTIFICATIONS'],
+				],
+				'webhooks'	=> [
+					'title'	=> 'ACP_DISCORD_NOTIFICATIONS_WEBHOOKS',
+					'auth'	=> 'ext_mober/discordnotifications && acl_a_board',
+					'cat'	=> ['ACP_DISCORD_NOTIFICATIONS'],
+				],
+				'mapping'	=> [
+					'title'	=> 'ACP_DISCORD_NOTIFICATIONS_MAPPING',
+					'auth'	=> 'ext_mober/discordnotifications && acl_a_board',
+					'cat'	=> ['ACP_DISCORD_NOTIFICATIONS'],
+				],
+			],
+		];
 	}
 }

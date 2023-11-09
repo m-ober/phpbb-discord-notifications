@@ -70,7 +70,7 @@ class notification_service
 	{
 		global $table_prefix;
 
-		if (is_numeric($forum_id) == false)
+		if (!is_numeric($forum_id))
 		{
 			return false;
 		}
@@ -118,7 +118,7 @@ class notification_service
 	 */
 	public function query_forum_name($forum_id)
 	{
-		if (is_numeric($forum_id) == false)
+		if (!is_numeric($forum_id))
 		{
 			return null;
 		}
@@ -138,7 +138,7 @@ class notification_service
 	 */
 	public function query_post_subject($post_id)
 	{
-		if (is_numeric($post_id) == false)
+		if (!is_numeric($post_id))
 		{
 			return null;
 		}
@@ -159,7 +159,7 @@ class notification_service
 	 */
 	public function query_topic_title($topic_id)
 	{
-		if (is_numeric($topic_id) == false)
+		if (!is_numeric($topic_id))
 		{
 			return null;
 		}
@@ -180,9 +180,9 @@ class notification_service
 	 */
 	public function query_topic_details($topic_id)
 	{
-		if (is_numeric($topic_id) == false)
+		if (!is_numeric($topic_id))
 		{
-			return array();
+			return [];
 		}
 
 		$sql = "SELECT
@@ -205,7 +205,7 @@ class notification_service
 	 */
 	public function query_user_name($user_id)
 	{
-		if (is_numeric($user_id) == false)
+		if (!is_numeric($user_id))
 		{
 			return false;
 		}
@@ -231,7 +231,7 @@ class notification_service
 	{
 		global $table_prefix;
 
-		if ($this->config['discord_notifications_enabled'] == 0 || isset($message) == false)
+		if ($this->config['discord_notifications_enabled'] == 0 || !isset($message))
 		{
 			return;
 		}
@@ -263,7 +263,7 @@ class notification_service
 	 */
 	public function force_send_discord_notification($discord_webhook_url, $message)
 	{
-		if (!filter_var($discord_webhook_url, FILTER_VALIDATE_URL) || is_string($message) == false || $message == '')
+		if (!filter_var($discord_webhook_url, FILTER_VALIDATE_URL) || !is_string($message) || $message == '')
 		{
 			return false;
 		}
@@ -290,20 +290,20 @@ class notification_service
 	 */
 	private function execute_discord_webhook($discord_webhook_url, $color, $message, $title = null, $preview = null, $footer = null)
 	{
-		if (isset($discord_webhook_url) == false || $discord_webhook_url === '')
+		if (!isset($discord_webhook_url) || $discord_webhook_url === '')
 		{
 			return false;
 		}
-		if (is_integer($color) == false || $color < 0)
+		if (!is_integer($color) || $color < 0)
 		{
 			// Use the default color if we did not receive a valid color value
 			$color = self::DEFAULT_COLOR;
 		}
-		if (is_string($message) == false || $message == '')
+		if (!is_string($message) || $message == '')
 		{
 			return false;
 		}
-		if (isset($footer) == true && (is_string($footer) == false || $footer == ''))
+		if (isset($footer) && (!is_string($footer) || $footer == ''))
 		{
 			return false;
 		}
@@ -339,14 +339,16 @@ class notification_service
 		// Place the message inside the JSON structure that Discord expects to receive at the REST endpoint.
 
 		$embed = [
-			'timestamp'   => date('c', time()),
-			'color'       => $color,
-			'description' => $message
+			'timestamp'		=> date('c', time()),
+			'color'			=> $color,
+			'description'	=> $message,
 		];
 
 		if (isset($footer))
 		{
-			$embed["footer"] = ["text" => $footer];
+			$embed['footer'] = [
+				'text' => $footer,
+			];
 		}
 
 		if (isset($title) && isset($preview))
@@ -357,16 +359,16 @@ class notification_service
 			{
 				$embed['fields'] = [
 					[
-						'name'   => $title,
-						'value'  => $preview,
-						'inline' => false
-					]
+						'name'		=> $title,
+						'value'		=> $preview,
+						'inline'	=> false,
+					],
 				];
 			}
 		}
 
 		$payload = [
-			'embeds' => [$embed]
+			'embeds' => [$embed],
 		];
 
 		$json = \json_encode($payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
@@ -378,7 +380,7 @@ class notification_service
 
 		// Use the CURL library to transmit the message via a POST operation to the webhook URL.
 		$h = curl_init();
-		curl_setopt($h, CURLOPT_HTTPHEADER, array('Content-type: application/json'));
+		curl_setopt($h, CURLOPT_HTTPHEADER, ['Content-type: application/json']);
 		curl_setopt($h, CURLOPT_URL, $discord_webhook_url);
 		curl_setopt($h, CURLOPT_POST, 1);
 		curl_setopt($h, CURLOPT_POSTFIELDS, $json);
@@ -398,7 +400,8 @@ class notification_service
 				$this->log->add('admin', ANONYMOUS, '127.0.0.1', 'ACP_DISCORD_NOTIFICATIONS_WEBHOOK_ERROR', time(), [$status]);
 				return false;
 			}
-		} else
+		}
+		else
 		{
 			$this->log->add('admin', ANONYMOUS, '127.0.0.1', 'ACP_DISCORD_NOTIFICATIONS_CURL_ERROR', time(), [$error]);
 			return false;

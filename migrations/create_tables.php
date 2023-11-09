@@ -12,7 +12,7 @@ class create_tables extends \phpbb\db\migration\migration
 {
 	static public function depends_on()
 	{
-		return array('\mober\discordnotifications\migrations\extension_installation');
+		return ['\mober\discordnotifications\migrations\extension_installation'];
 	}
 
 	/**
@@ -21,23 +21,23 @@ class create_tables extends \phpbb\db\migration\migration
 	*/
 	public function update_schema()
 	{
-		return array(
-			'add_tables' => array (
-				$this->table_prefix . 'discord_webhooks' => array (
-					'COLUMNS' => array (
-						'alias' => array (
+		return [
+			'add_tables' => [
+				$this->table_prefix . 'discord_webhooks' => [
+					'COLUMNS' => [
+						'alias'	=> [
 							'VCHAR:255',
-							''
-						),
-						'url' => array (
+							'',
+						],
+						'url' => [
 							'VCHAR:255',
-							''
-						),
-					),
+							'',
+						],
+					],
 					'PRIMARY_KEY' => 'alias',
-				),
-			),
-		);
+				],
+			],
+		];
 	}
 
 	/**
@@ -46,10 +46,10 @@ class create_tables extends \phpbb\db\migration\migration
 	*/
 	public function revert_schema()
 	{
-		return array (
-			'drop_tables' => array (
+		return [
+			'drop_tables' => [
 				$this->table_prefix . 'discord_webhooks',
-			)
-		);
+			],
+		];
 	}
 }

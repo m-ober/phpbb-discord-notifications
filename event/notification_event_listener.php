@@ -79,7 +79,7 @@ class notification_event_listener implements EventSubscriberInterface
 	 */
 	static public function getSubscribedEvents()
 	{
-		return array(
+		return [
 			// This event is used for performing actions directly after a post or topic has been submitted.
 			'core.submit_post_end'				=> 'handle_post_submit_action',
 			// This event is used for performing actions directly after a post or topic has been deleted.
@@ -100,7 +100,7 @@ class notification_event_listener implements EventSubscriberInterface
 			'core.approve_topics_after'			=> 'handle_topic_approval_action',
 			// Post approval
 			'core.approve_posts_after'			=> 'handle_post_approval_action',
-		);
+		];
 	}
 
 	// ----------------------------------------------------------------------------
@@ -179,7 +179,7 @@ class notification_event_listener implements EventSubscriberInterface
 		}
 
 		// Build an array of the event data that we may need to pass along to the function that will construct the notification message
-		$post_data = array(
+		$post_data = [
 			'user_id'			=> $event['data']['poster_id'],
 			'user_name'			=> $event['username'],
 			'forum_id'			=> $event['data']['forum_id'],
@@ -192,7 +192,7 @@ class notification_event_listener implements EventSubscriberInterface
 			'edit_user_name'	=> $this->language->lang('UNKNOWN_USER'),
 			'edit_reason'		=> $event['data']['post_edit_reason'],
 			'content'			=> $event['data']['message'],
-		);
+		];
 
 		if ($post_data['edit_user_id'] == $post_data['user_id'])
 		{
@@ -254,7 +254,7 @@ class notification_event_listener implements EventSubscriberInterface
 
 		// Build an array of the event data that we may need to pass along to the function that will construct the notification message.
 		// Note that unfortunately, the event data does not give us any information indicating which user deleted the post.
-		$post_data = array(
+		$post_data = [
 			'user_id'		=> $event['data']['poster_id'],
 			'user_name'		=> $this->language->lang('UNKNOWN_USER'),
 			'forum_id'		=> $event['forum_id'],
@@ -263,7 +263,7 @@ class notification_event_listener implements EventSubscriberInterface
 			'topic_title'	=> $this->language->lang('UNKNOWN_TOPIC'),
 			'post_id'		=> $event['post_id'],
 			'delete_reason'	=> $event['softdelete_reason'],
-		);
+		];
 
 		// Fetch the forum name, topic title, and user name using the respective IDs.
 		$forum_name = $this->notification_service->query_forum_name($post_data['forum_id']);
@@ -319,13 +319,14 @@ class notification_event_listener implements EventSubscriberInterface
 		}
 
 		// Copy over the data necessary to generate the notification into a new array
-		$delete_data = array();
-		$delete_data['forum_id'] = $query_data['forum_id'];
-		$delete_data['forum_name'] = $query_data['forum_name'];
-		$delete_data['topic_title'] = $query_data['topic_title'];
-		$delete_data['topic_post_count'] = $query_data['topic_posts_approved'];
-		$delete_data['user_id'] = $query_data['topic_poster'];
-		$delete_data['user_name'] = $query_data['topic_first_poster_name'];
+		$delete_data = [
+			'forum_id'			=> $query_data['forum_id'],
+			'forum_name'		=> $query_data['forum_name'],
+			'topic_title'		=> $query_data['topic_title'],
+			'topic_post_count'	=> $query_data['topic_posts_approved'],
+			'user_id'			=> $query_data['topic_poster'],
+			'user_name'			=> $query_data['topic_first_poster_name'],
+		];
 
 		$this->notify_topic_deleted($delete_data, $webhook_url);
 	}
@@ -352,22 +353,24 @@ class notification_event_listener implements EventSubscriberInterface
 
 		// Get the ID needed to access $event['data'], then extract all relevant data from the event that we need to generate the notification
 		$id = array_slice($event['ids'], -1)[0];
+		$event_data = $event['data'][$id];
 
-		$lock_data = array();
-		$lock_data['forum_id'] = $event['data'][$id]['forum_id'];
-		$lock_data['forum_name'] = $event['data'][$id]['forum_name'];
-		$lock_data['post_id'] = $event['data'][$id]['post_id'] ?? ''; // only used for post_[un]lock events
-		$lock_data['post_subject'] = $event['data'][$id]['post_subject'] ?? ''; // only used for post_[un]lock events
-		$lock_data['topic_id'] = $event['data'][$id]['topic_id'];
-		$lock_data['topic_title'] = $event['data'][$id]['topic_title'];
-		// Two sets of user data captured: one for the post (if applicable) and one for the user that started the topic
-		$lock_data['post_user_id'] = $event['data'][$id]['poster_id'] ?? ''; // only used for post_[un]lock events
-		$lock_data['post_user_name'] = $event['data'][$id]['username'] ?? ''; // only used for post_[un]lock events
-		$lock_data['topic_user_id'] = $event['data'][$id]['topic_poster'];
-		$lock_data['topic_user_name'] = $event['data'][$id]['topic_first_poster_name'];
+		$lock_data = [
+			'forum_id'			=> $event_data['forum_id'],
+			'forum_name'		=> $event_data['forum_name'],
+			'topic_id'			=> $event_data['topic_id'],
+			'topic_title'		=> $event_data['topic_title'],
+			'topic_user_id'		=> $event_data['topic_poster'],
+			'topic_user_name'	=> $event_data['topic_first_poster_name'],
+			// only used for post_[un]lock events, not always set
+			'post_id'			=> $event_data['post_id'] ?? '',
+			'post_subject'		=> $event_data['post_subject'] ?? '',
+			'post_user_id'		=> $event_data['poster_id'] ?? '',
+			'post_user_name'	=> $event_data['username'] ?? '',
+		];
 
 		// If the forum the post was made in does not have notifications enabled or the topic/poar is not visible, do nothing more.
-		$topic_visibile = $event['data'][$id]['topic_visibility'] == 1;
+		$topic_visibile = $event_data['topic_visibility'] == 1;
 		$webhook_url = $this->notification_service->get_forum_notification_url($lock_data['forum_id']);
 		if (!$webhook_url || !$topic_visibile)
 		{
@@ -429,7 +432,7 @@ class notification_event_listener implements EventSubscriberInterface
 	 */
 	public function handle_user_activate_action($event)
 	{
-		$user_data = array();
+		$user_data = [];
 		if ($event['user_id'])
 		{
 			$user_data['user_id'] = $event['user_id'];
@@ -458,7 +461,7 @@ class notification_event_listener implements EventSubscriberInterface
 	public function handle_user_delete_action($event)
 	{
 		// Extract the IDs and names of all deleted users to pass along in an array of (id => name)
-		$user_data = array();
+		$user_data = [];
 		foreach ($event['user_ids'] as $id)
 		{
 			$user_data[$id] = $event['user_rows'][$id]['username'];

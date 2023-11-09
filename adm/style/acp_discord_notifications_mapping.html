@@ -1,100 +1,40 @@
-<!-- INCLUDE overall_header.html -->
+{% include 'overall_header.html' %}
 
 <h1>{{ lang('ACP_DISCORD_NOTIFICATIONS') }}</h1>
 
-<p>{{ DN_ACP_DESCRIPTION }}</p>
+<p>{{ lang('DN_ACP_DESCRIPTION') }}</p>
+
+{% if not DN_CURL_AVAILABLE %}
+	<div class="errorbox">
+		<p>{{ lang('DN_MISSING_CURL') }}</p>
+	</div>
+{% endif %}
 
 <form id="acp_board" method="post" action="{{ U_ACTION }}">
 
 	<fieldset>
-		<legend>{{ lang('DN_MAIN_SETTINGS') }}</legend>
+		<legend>{{ lang('DN_WEBHOOK_DEFAULT') }}</legend>
 		<dl>
-			<dt><label>{{ lang('DN_MASTER_ENABLE') }}{{ lang('COLON') }}</label></dt>
-			<dd><label><input type="radio" class="radio" name="dn_master_enable" value="1" {% if DN_MASTER_ENABLE %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
-				<label><input type="radio" class="radio" name="dn_master_enable" value="0" {% if not DN_MASTER_ENABLE %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
+			<dt><label>{{ lang('DN_USER_CREATE') }}{{ lang('COLON') }}</label></dt>
+			<dd><label><input type="radio" class="radio" name="dn_user_create" value="1" {% if DN_USER_CREATE %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
+				<label><input type="radio" class="radio" name="dn_user_create" value="0" {% if not DN_USER_CREATE %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
 		</dl>
 		<dl>
-			<dt><label for="dn_post_preview_length">{{ lang('DN_POST_PREVIEW_LENGTH') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_POST_PREVIEW_DESCRIPTION') }}</span></dt>
-			<dd>
-				<input id="dn_post_preview_length" name="dn_post_preview_length" type="text" value="{{ DN_POST_PREVIEW_LENGTH }}" size="4" maxlength="4" />
-			</dd>
+			<dt><label>{{ lang('DN_USER_DELETE') }}{{ lang('COLON') }}</label></dt>
+			<dd><label><input type="radio" class="radio" name="dn_user_delete" value="1" {% if DN_USER_DELETE %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
+				<label><input type="radio" class="radio" name="dn_user_delete" value="0" {% if not DN_USER_DELETE %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
 		</dl>
 		<dl>
-			<dt><label for="dn_connect_to">{{ lang('DN_CONNECT_TIMEOUT') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_CONNECT_TO_DESCRIPTION') }}</span></dt>
+			<dt><label for="dn_webhook_default">{{ lang('DN_WEBHOOK_DEFAULT') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_WEBHOOK_DEFAULT_DESCRIPTION') }}</span></dt>
 			<dd>
-				<input id="dn_connect_to" name="dn_connect_to" type="text" value="{{ DN_CONNECT_TIMEOUT }}" size="4" maxlength="4" />
-			</dd>
-		</dl>
-		<dl>
-			<dt><label for="dn_exec_to">{{ lang('DN_EXEC_TIMEOUT') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_EXEC_TO_DESCRIPTION') }}</span></dt>
-			<dd>
-				<input id="dn_exec_to" name="dn_exec_to" type="text" value="{{ DN_EXEC_TIMEOUT }}" size="4" maxlength="4" />
-			</dd>
-		</dl>
-	</fieldset>
-
-	<fieldset>
-		<legend>{{ lang('DN_WEBHOOK_SETTINGS') }}</legend>
-		<p>{{ lang('DN_WEBHOOK_SETTINGS_DESCRIPTION') }}</p>
-		{% if loops.webhookrow %}
-			{% for webhook in loops.webhookrow %}
-				<dl>
-					<dt><label for="dn_webhook_{{ webhook.ALIAS }}">{{ webhook.ALIAS }}</label></dt>
-					<dd>
-						<input type="text" size="100" maxlength="255" id="dn_webhook_{{ webhook.ALIAS }}" name="dn_webhook[{{ webhook.ALIAS }}]" value="{{ webhook.URL }}" />
-						<input type="submit" name="action_delete_alias[{{ webhook.ALIAS }}]" value="{{ lang('DELETE') }}" class="button2" onclick="return confirm('{{ lang('CONFIRM_OPERATION') }}');">
-					</dd>
-				</dl>
-			{% endfor %}
-		{% else %}
-			<p><strong>{{ lang('DN_NO_WEBHOOKS') }}</strong></p>
-		{% endif %}
-	</fieldset>
-
-	<fieldset>
-		<legend>{{ lang('DN_WEBHOOK_NEW') }}</legend>
-		<p>{{ lang('DN_WEBHOOK_NEW_DESCRIPTION') }}</p>
-		<dl>
-			<dt><label for="dn_webhook_new_alias">{{ lang('DN_WEBHOOK_NEW_ALIAS') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_WEBHOOK_NEW_ALIAS_DESCRIPTION') }}</span></dt>
-			<dd>
-				<input id="dn_webhook_new_alias" name="dn_webhook_new_alias" type="text" value="" size="100" maxlength="255" />
-			</dd>
-		</dl>
-		<dl>
-			<dt><label for="dn_webhook_new_url">{{ lang('DN_WEBHOOK_NEW_URL') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_WEBHOOK_NEW_URL_DESCRIPTION') }}</span></dt>
-			<dd>
-				<input id="dn_webhook_new_url" name="dn_webhook_new_url" type="text" value="" size="100" maxlength="255" />
-			</dd>
-		</dl>
-	</fieldset>
-
-	<fieldset>
-		<legend>{{ lang('DN_TEST_SETTINGS') }}</legend>
-		<dl>
-			<dt><label for="dn_test_message">{{ lang('DN_TEST_MESSAGE') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_TEST_DESCRIPTION') }}</span></dt>
-			<dd>
-				<input id="dn_test_message" name="dn_test_message" type="text" value="{{ DN_TEST_MESSAGE_TEXT }}" size="100" maxlength="255" />
-			</dd>
-		</dl>
-		{% if loops.webhookrow %}
-		<dl>
-			<dt><label for="dn_test_webhook">{{ lang('DN_WEBHOOK_SELECT') }}{{ lang('COLON') }}</label><br /></dt>
-			<dd>
-				<select id="dn_test_webhook" name="dn_test_webhook">
-					<option value="">{{ lang('DN_WEBHOOK_SELECT') }}</option>
+				<select id="dn_webhook_default" name="dn_webhook_default">
+					<option value="">({{ lang('DISABLED') }})</option>
 					{% for webhook in loops.webhookrow %}
-					<option value="{{ webhook.ALIAS }}"{% if forumrow.ALIAS == webhook.ALIAS %} selected{% endif %}>{{ webhook.ALIAS }}</option>
+						<option value="{{ webhook.ALIAS }}"{% if DN_DEFAULT_WEBHOOK == webhook.ALIAS %} selected{% endif %}>{{ webhook.ALIAS }}</option>
 					{% endfor %}
 				</select>
 			</dd>
 		</dl>
-		<dl>
-			<dt><label for="action_send_test_message">{{ lang('DN_SEND_TEST') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_SEND_TEST_DESCRIPTION') }}</span></dt>
-			<dd><input class="button2" type="submit" id="action_send_test_message" name="action_send_test_message" value="{{ lang('DN_SEND_TEST') }}" /></dd>
-		</dl>
-		{% else %}
-		<p><strong>{{ lang('DN_NO_WEBHOOKS') }}</strong></p>
-		{% endif %}
 	</fieldset>
 
 	<fieldset>
@@ -159,27 +99,6 @@
 			<dt><label>{{ lang('DN_TOPIC_APPROVE') }}{{ lang('COLON') }}</label></dt>
 			<dd><label><input type="radio" class="radio" name="dn_topic_approve" value="1" {% if DN_TOPIC_APPROVE %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
 				<label><input type="radio" class="radio" name="dn_topic_approve" value="0" {% if not DN_TOPIC_APPROVE %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
-		</dl>
-		<dl>
-			<dt><label>{{ lang('DN_USER_CREATE') }}{{ lang('COLON') }}</label></dt>
-			<dd><label><input type="radio" class="radio" name="dn_user_create" value="1" {% if DN_USER_CREATE %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
-				<label><input type="radio" class="radio" name="dn_user_create" value="0" {% if not DN_USER_CREATE %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
-		</dl>
-		<dl>
-			<dt><label>{{ lang('DN_USER_DELETE') }}{{ lang('COLON') }}</label></dt>
-			<dd><label><input type="radio" class="radio" name="dn_user_delete" value="1" {% if DN_USER_DELETE %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
-				<label><input type="radio" class="radio" name="dn_user_delete" value="0" {% if not DN_USER_DELETE %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
-		</dl>
-		<dl>
-			<dt><label for="dn_webhook_default">{{ lang('DN_WEBHOOK_DEFAULT') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_WEBHOOK_DEFAULT_DESCRIPTION') }}</span></dt>
-			<dd>
-				<select id="dn_webhook_default" name="dn_webhook_default">
-					<option value="">({{ lang('DISABLED') }})</option>
-					{% for webhook in loops.webhookrow %}
-					<option value="{{ webhook.ALIAS }}"{% if DN_DEFAULT_WEBHOOK == webhook.ALIAS %} selected{% endif %}>{{ webhook.ALIAS }}</option>
-					{% endfor %}
-				</select>
-			</dd>
 		</dl>
 	</fieldset>
 
