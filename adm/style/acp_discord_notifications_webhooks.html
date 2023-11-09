@@ -49,13 +49,13 @@
 
 	<fieldset>
 		<legend>{{ lang('DN_TEST_SETTINGS') }}</legend>
+		{% if loops.webhookrow %}
 		<dl>
 			<dt><label for="dn_test_message">{{ lang('DN_TEST_MESSAGE') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_TEST_DESCRIPTION') }}</span></dt>
 			<dd>
 				<input id="dn_test_message" name="dn_test_message" type="text" value="{{ DN_TEST_MESSAGE_TEXT }}" size="100" maxlength="255" />
 			</dd>
 		</dl>
-		{% if loops.webhookrow %}
 		<dl>
 			<dt><label for="dn_test_webhook">{{ lang('DN_WEBHOOK_SELECT') }}{{ lang('COLON') }}</label><br /></dt>
 			<dd>
