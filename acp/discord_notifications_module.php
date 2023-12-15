@@ -189,7 +189,7 @@ class discord_notifications_module
 		$this->validate_post_request();
 
 		$webhook = $this->request->variable('dn_test_webhook', '', true);
-		$test_message = $this->request->variable('dn_test_message', '');
+		$test_message = $this->request->variable('dn_test_message', '', true);
 
 		// Check user inputs before attempting to send the message
 		if ($test_message == '')
