@@ -18,9 +18,8 @@ class discord_notifications_module
 	const MIN_POST_PREVIEW_LENGTH = 10;
 
 	// The maximum number of characters that the user can set for the post preview setting.
-	// Note that this is slightly less than the actual allowed maximum by Discord (2048), but we reserve
-	// some space to prepend the preview text with something like "Preview: " or "Reason: "
-	const MAX_POST_PREVIEW_LENGTH = 2000;
+	// See: https://discord.com/developers/docs/resources/channel#embed-object-embed-limits
+	const MAX_POST_PREVIEW_LENGTH = 1024;
 
 	// The name for the form used for this page
 	const PAGE_FORM_NAME = 'acp_mober_discord_notifications';
