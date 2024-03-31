@@ -20,7 +20,7 @@
 				<label><input type="radio" class="radio" name="dn_master_enable" value="0" {% if not DN_MASTER_ENABLE %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
 		</dl>
 		<dl>
-			<dt><label for="dn_post_preview_length">{{ lang('DN_POST_PREVIEW_LENGTH') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_POST_PREVIEW_DESCRIPTION') }}</span></dt>
+			<dt><label for="dn_post_preview_length">{{ lang('DN_POST_PREVIEW_LENGTH') }}{{ lang('COLON') }}</label><br /><span>{{ DN_POST_PREVIEW_DESCRIPTION }}</span></dt>
 			<dd>
 				<input id="dn_post_preview_length" name="dn_post_preview_length" type="text" value="{{ DN_POST_PREVIEW_LENGTH }}" size="4" maxlength="4" />
 			</dd>

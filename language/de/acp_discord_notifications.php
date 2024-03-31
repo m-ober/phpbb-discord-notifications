@@ -26,7 +26,7 @@ $lang = array_merge($lang, array(
 	'DN_MAIN_SETTINGS'				=> 'Konfiguration',
 	'DN_MASTER_ENABLE'				=> 'Discord Benachrichtigungen aktivieren',
 	'DN_POST_PREVIEW_LENGTH'		=> 'Länge der Vorschau',
-	'DN_POST_PREVIEW_DESCRIPTION'	=> 'Wie viele Zeichen eines Beitrags sollen in der Vorschau angezeigt werden? (10-2000, 0 deaktiviert die Vorschau)',
+	'DN_POST_PREVIEW_DESCRIPTION'	=> 'Wie viele Zeichen eines Beitrags sollen in der Vorschau angezeigt werden? (%1$d-%2$d), 0 deaktiviert die Vorschau)',
 	'DN_TEST_MESSAGE'				=> 'Nachricht',
 	'DN_TEST_MESSAGE_TEXT'			=> 'Dies ist ein Test: Hallo, Discord!',
 	'DN_TEST_DESCRIPTION'			=> 'Nachricht, die beim Starten eines Tests geschickt wird.',
@@ -80,5 +80,5 @@ $lang = array_merge($lang, array(
 	// Success/Failure messages that can be generated once the user saves
 	'DN_SETTINGS_SAVED'				=> 'Einstellungen aktualisiert.',
 	'DN_WEBHOOK_URL_INVALID'		=> 'Die Webhook-URL ist ungültig. Bitte überprüfe die Konfiguration.',
-	'DN_POST_PREVIEW_INVALID'		=> 'Länge der Vorschau muss zwischen 10 und 2000 Zeichen sein (oder 0 zum Deaktivieren der Vorschau).',
+	'DN_POST_PREVIEW_INVALID'		=> 'Länge der Vorschau muss zwischen %1$d und %2$d Zeichen sein (oder 0 zum Deaktivieren der Vorschau).',
 ));

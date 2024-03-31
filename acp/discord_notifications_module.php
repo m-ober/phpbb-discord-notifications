@@ -126,33 +126,34 @@ class discord_notifications_module
 
 		// Assign template values so that the page reflects the state of the extension settings
 		$this->template->assign_vars([
-			'DN_MASTER_ENABLE'			=> $this->config['discord_notifications_enabled'],
-			'DN_POST_PREVIEW_LENGTH'	=> $this->config['discord_notifications_post_preview_length'],
-			'DN_TEST_MESSAGE_TEXT'		=> $this->language->lang('DN_TEST_MESSAGE_TEXT'),
-			'DN_CONNECT_TIMEOUT'		=> $this->config['discord_notifications_connect_timeout'],
-			'DN_EXEC_TIMEOUT'			=> $this->config['discord_notifications_exec_timeout'],
+			'DN_MASTER_ENABLE'				=> $this->config['discord_notifications_enabled'],
+			'DN_POST_PREVIEW_LENGTH'		=> $this->config['discord_notifications_post_preview_length'],
+			'DN_POST_PREVIEW_DESCRIPTION'	=> sprintf($this->language->lang('DN_POST_PREVIEW_DESCRIPTION'), self::MIN_POST_PREVIEW_LENGTH, self::MAX_POST_PREVIEW_LENGTH),
+			'DN_TEST_MESSAGE_TEXT'			=> $this->language->lang('DN_TEST_MESSAGE_TEXT'),
+			'DN_CONNECT_TIMEOUT'			=> $this->config['discord_notifications_connect_timeout'],
+			'DN_EXEC_TIMEOUT'				=> $this->config['discord_notifications_exec_timeout'],
 
-			'DN_POST_CREATE'			=> $this->config['discord_notification_type_post_create'],
-			'DN_POST_UPDATE'			=> $this->config['discord_notification_type_post_update'],
-			'DN_POST_DELETE'			=> $this->config['discord_notification_type_post_delete'],
-			'DN_POST_LOCK'				=> $this->config['discord_notification_type_post_lock'],
-			'DN_POST_UNLOCK'			=> $this->config['discord_notification_type_post_unlock'],
-			'DN_POST_APPROVE'			=> $this->config['discord_notification_type_post_approve'],
+			'DN_POST_CREATE'				=> $this->config['discord_notification_type_post_create'],
+			'DN_POST_UPDATE'				=> $this->config['discord_notification_type_post_update'],
+			'DN_POST_DELETE'				=> $this->config['discord_notification_type_post_delete'],
+			'DN_POST_LOCK'					=> $this->config['discord_notification_type_post_lock'],
+			'DN_POST_UNLOCK'				=> $this->config['discord_notification_type_post_unlock'],
+			'DN_POST_APPROVE'				=> $this->config['discord_notification_type_post_approve'],
 
-			'DN_TOPIC_CREATE'			=> $this->config['discord_notification_type_topic_create'],
-			'DN_TOPIC_UPDATE'			=> $this->config['discord_notification_type_topic_update'],
-			'DN_TOPIC_DELETE'			=> $this->config['discord_notification_type_topic_delete'],
-			'DN_TOPIC_LOCK'				=> $this->config['discord_notification_type_topic_lock'],
-			'DN_TOPIC_UNLOCK'			=> $this->config['discord_notification_type_topic_unlock'],
-			'DN_TOPIC_APPROVE'			=> $this->config['discord_notification_type_topic_approve'],
+			'DN_TOPIC_CREATE'				=> $this->config['discord_notification_type_topic_create'],
+			'DN_TOPIC_UPDATE'				=> $this->config['discord_notification_type_topic_update'],
+			'DN_TOPIC_DELETE'				=> $this->config['discord_notification_type_topic_delete'],
+			'DN_TOPIC_LOCK'					=> $this->config['discord_notification_type_topic_lock'],
+			'DN_TOPIC_UNLOCK'				=> $this->config['discord_notification_type_topic_unlock'],
+			'DN_TOPIC_APPROVE'				=> $this->config['discord_notification_type_topic_approve'],
 
-			'DN_USER_CREATE'			=> $this->config['discord_notification_type_user_create'],
-			'DN_USER_DELETE'			=> $this->config['discord_notification_type_user_delete'],
+			'DN_USER_CREATE'				=> $this->config['discord_notification_type_user_create'],
+			'DN_USER_DELETE'				=> $this->config['discord_notification_type_user_delete'],
 
-			'DN_DEFAULT_WEBHOOK'		=> $this->config['discord_notification_default_webhook'],
+			'DN_DEFAULT_WEBHOOK'			=> $this->config['discord_notification_default_webhook'],
 
-			'DN_CURL_AVAILABLE'			=> $this->curl_available,
-			'U_ACTION'					=> $this->u_action,
+			'DN_CURL_AVAILABLE'				=> $this->curl_available,
+			'U_ACTION'						=> $this->u_action,
 		]);
 	}
 
@@ -247,12 +248,26 @@ class discord_notifications_module
 		// Verify that the post preview length is a numeric string, convert to an int and check the valid range
 		if (!is_numeric($preview_length))
 		{
-			trigger_error($this->language->lang('DN_POST_PREVIEW_INVALID') . adm_back_link($this->u_action), E_USER_WARNING);
+			trigger_error(
+				sprintf(
+					$this->language->lang('DN_POST_PREVIEW_INVALID'),
+					self::MIN_POST_PREVIEW_LENGTH,
+					self::MAX_POST_PREVIEW_LENGTH
+				) . adm_back_link($this->u_action),
+				E_USER_WARNING
+			);
 		}
 		$preview_length = (int) $preview_length;
 		if ($preview_length != 0 && ($preview_length < self::MIN_POST_PREVIEW_LENGTH || $preview_length > self::MAX_POST_PREVIEW_LENGTH))
 		{
-			trigger_error($this->language->lang('DN_POST_PREVIEW_INVALID') . adm_back_link($this->u_action), E_USER_WARNING);
+			trigger_error(
+				sprintf(
+					$this->language->lang('DN_POST_PREVIEW_INVALID'),
+					self::MIN_POST_PREVIEW_LENGTH,
+					self::MAX_POST_PREVIEW_LENGTH
+				) . adm_back_link($this->u_action),
+				E_USER_WARNING
+			);
 		}
 
 		$connect_timeout = max(1, (int) $this->request->variable('dn_connect_to', 0));

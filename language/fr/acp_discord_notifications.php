@@ -47,7 +47,7 @@ $lang = array_merge($lang, array(
 	'DN_MAIN_SETTINGS'				=> 'Paramètres généraux',
 	'DN_MASTER_ENABLE'				=> 'Activer les notifications Discord',
 	'DN_POST_PREVIEW_LENGTH'		=> 'Longueur de l’aperçu des messages',
-	'DN_POST_PREVIEW_DESCRIPTION'	=> 'Permet de saisir le nombre de caractères à afficher dans l’aperçu des messages (10 - 2000). Définir sur la valeur 0 pour désactiver l’aperçu des messages.',
+	'DN_POST_PREVIEW_DESCRIPTION'	=> 'Permet de saisir le nombre de caractères à afficher dans l’aperçu des messages (%1$d-%2$d). Définir sur la valeur 0 pour désactiver l’aperçu des messages.',
 	'DN_TEST_MESSAGE'				=> 'Message',
 	'DN_TEST_MESSAGE_TEXT'			=> 'Texte du message de test : Hello Discord!',
 	'DN_TEST_DESCRIPTION'			=> 'Permet d’envoyer un message sur le serveur Discord afin de vérifier que la connexion avec phpBB est fonctionnelle.',
@@ -101,5 +101,5 @@ $lang = array_merge($lang, array(
 	// Success/Failure messages that can be generated once the user saves
 	'DN_SETTINGS_SAVED'				=> 'Les paramètres de notification Discord ont été modifiés avec succès !',
 	'DN_WEBHOOK_URL_INVALID'		=> 'L’adresse URL Webhook du serveur Discord doit être complète et correspondre à une adresse URL valide.',
-	'DN_POST_PREVIEW_INVALID'		=> 'La longueur de l’aperçu des messages doit être comprise entre 10 et 2000 ou définie sur 0 pour la désactivation de l’aperçu.',
+	'DN_POST_PREVIEW_INVALID'		=> 'La longueur de l’aperçu des messages doit être comprise entre %1$d et %2$d ou définie sur 0 pour la désactivation de l’aperçu.',
 ));

@@ -26,7 +26,7 @@ $lang = array_merge($lang, array(
 	'DN_MAIN_SETTINGS'				=> 'Main Settings',
 	'DN_MASTER_ENABLE'				=> 'Enable Discord Notifications',
 	'DN_POST_PREVIEW_LENGTH'		=> 'Post Preview Length',
-	'DN_POST_PREVIEW_DESCRIPTION'	=> 'Specify the number of characters to display in a post preview (10 - 2000). A zero value disables post preview.',
+	'DN_POST_PREVIEW_DESCRIPTION'	=> 'Specify the number of characters to display in a post preview (%1$d-%2$d). A zero value disables post preview.',
 	'DN_TEST_MESSAGE'				=> 'Message',
 	'DN_TEST_MESSAGE_TEXT'			=> 'This is a test: Hello Discord!',
 	'DN_TEST_DESCRIPTION'			=> 'A message to send to Discord to verify that the connection with phpBB is functioning.',
@@ -80,5 +80,5 @@ $lang = array_merge($lang, array(
 	// Success/Failure messages that can be generated once the user saves
 	'DN_SETTINGS_SAVED'				=> 'Discord Notification settings modified successfully.',
 	'DN_WEBHOOK_URL_INVALID'		=> 'Discord webhook URL must be a full and valid URL.',
-	'DN_POST_PREVIEW_INVALID'		=> 'Post preview length must be a number between 10 and 2000, or 0 to disable previews.',
+	'DN_POST_PREVIEW_INVALID'		=> 'Post preview length must be a number between %1$d and %2$d, or 0 to disable previews.',
 ));
