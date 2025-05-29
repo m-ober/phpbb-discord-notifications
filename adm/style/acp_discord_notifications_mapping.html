@@ -15,17 +15,17 @@
 	<fieldset>
 		<legend>{{ lang('DN_WEBHOOK_DEFAULT') }}</legend>
 		<dl>
-			<dt><label>{{ lang('DN_USER_CREATE') }}{{ lang('COLON') }}</label></dt>
+			<dt><label>{{ lang('DN_USER_CREATE') ~ lang('COLON') }}</label></dt>
 			<dd><label><input type="radio" class="radio" name="dn_user_create" value="1" {% if DN_USER_CREATE %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
 				<label><input type="radio" class="radio" name="dn_user_create" value="0" {% if not DN_USER_CREATE %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
 		</dl>
 		<dl>
-			<dt><label>{{ lang('DN_USER_DELETE') }}{{ lang('COLON') }}</label></dt>
+			<dt><label>{{ lang('DN_USER_DELETE') ~ lang('COLON') }}</label></dt>
 			<dd><label><input type="radio" class="radio" name="dn_user_delete" value="1" {% if DN_USER_DELETE %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
 				<label><input type="radio" class="radio" name="dn_user_delete" value="0" {% if not DN_USER_DELETE %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
 		</dl>
 		<dl>
-			<dt><label for="dn_webhook_default">{{ lang('DN_WEBHOOK_DEFAULT') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_WEBHOOK_DEFAULT_DESCRIPTION') }}</span></dt>
+			<dt><label for="dn_webhook_default">{{ lang('DN_WEBHOOK_DEFAULT') ~ lang('COLON') }}</label><br /><span>{{ lang('DN_WEBHOOK_DEFAULT_DESCRIPTION') }}</span></dt>
 			<dd>
 				<select id="dn_webhook_default" name="dn_webhook_default">
 					<option value="">({{ lang('DISABLED') }})</option>
@@ -41,62 +41,62 @@
 		<legend>{{ lang('DN_TYPE_SETTINGS') }}</legend>
 		<p>{{ lang('DN_TYPE_DESCRIPTION') }}</p>
 		<dl>
-			<dt><label>{{ lang('DN_POST_CREATE') }}{{ lang('COLON') }}</label></dt>
+			<dt><label>{{ lang('DN_POST_CREATE') ~ lang('COLON') }}</label></dt>
 			<dd><label><input type="radio" class="radio" name="dn_post_create" value="1" {% if DN_POST_CREATE %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
 				<label><input type="radio" class="radio" name="dn_post_create" value="0" {% if not DN_POST_CREATE %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
 		</dl>
 		<dl>
-			<dt><label>{{ lang('DN_POST_UPDATE') }}{{ lang('COLON') }}</label></dt>
+			<dt><label>{{ lang('DN_POST_UPDATE') ~ lang('COLON') }}</label></dt>
 			<dd><label><input type="radio" class="radio" name="dn_post_update" value="1" {% if DN_POST_UPDATE %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
 				<label><input type="radio" class="radio" name="dn_post_update" value="0" {% if not DN_POST_UPDATE %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
 		</dl>
 		<dl>
-			<dt><label>{{ lang('DN_POST_DELETE') }}{{ lang('COLON') }}</label></dt>
+			<dt><label>{{ lang('DN_POST_DELETE') ~ lang('COLON') }}</label></dt>
 			<dd><label><input type="radio" class="radio" name="dn_post_delete" value="1" {% if DN_POST_DELETE %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
 				<label><input type="radio" class="radio" name="dn_post_delete" value="0" {% if not DN_POST_DELETE %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
 		</dl>
 		<dl>
-			<dt><label>{{ lang('DN_POST_LOCK') }}{{ lang('COLON') }}</label></dt>
+			<dt><label>{{ lang('DN_POST_LOCK') ~ lang('COLON') }}</label></dt>
 			<dd><label><input type="radio" class="radio" name="dn_post_lock" value="1" {% if DN_POST_LOCK %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
 				<label><input type="radio" class="radio" name="dn_post_lock" value="0" {% if not DN_POST_LOCK %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
 		</dl>
 		<dl>
-			<dt><label>{{ lang('DN_POST_UNLOCK') }}{{ lang('COLON') }}</label></dt>
+			<dt><label>{{ lang('DN_POST_UNLOCK') ~ lang('COLON') }}</label></dt>
 			<dd><label><input type="radio" class="radio" name="dn_post_unlock" value="1" {% if DN_POST_UNLOCK %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
 				<label><input type="radio" class="radio" name="dn_post_unlock" value="0" {% if not DN_POST_UNLOCK %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
 		</dl>
 		<dl>
-			<dt><label>{{ lang('DN_POST_APPROVE') }}{{ lang('COLON') }}</label></dt>
+			<dt><label>{{ lang('DN_POST_APPROVE') ~ lang('COLON') }}</label></dt>
 			<dd><label><input type="radio" class="radio" name="dn_post_approve" value="1" {% if DN_POST_APPROVE %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
 				<label><input type="radio" class="radio" name="dn_post_approve" value="0" {% if not DN_POST_APPROVE %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
 		</dl>
 		<dl>
-			<dt><label>{{ lang('DN_TOPIC_CREATE') }}{{ lang('COLON') }}</label></dt>
+			<dt><label>{{ lang('DN_TOPIC_CREATE') ~ lang('COLON') }}</label></dt>
 			<dd><label><input type="radio" class="radio" name="dn_topic_create" value="1" {% if DN_TOPIC_CREATE %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
 				<label><input type="radio" class="radio" name="dn_topic_create" value="0" {% if not DN_TOPIC_CREATE %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
 		</dl>
 		<dl>
-			<dt><label>{{ lang('DN_TOPIC_UPDATE') }}{{ lang('COLON') }}</label></dt>
+			<dt><label>{{ lang('DN_TOPIC_UPDATE') ~ lang('COLON') }}</label></dt>
 			<dd><label><input type="radio" class="radio" name="dn_topic_update" value="1" {% if DN_TOPIC_UPDATE %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
 				<label><input type="radio" class="radio" name="dn_topic_update" value="0" {% if not DN_TOPIC_UPDATE %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
 		</dl>
 		<dl>
-			<dt><label>{{ lang('DN_TOPIC_DELETE') }}{{ lang('COLON') }}</label></dt>
+			<dt><label>{{ lang('DN_TOPIC_DELETE') ~ lang('COLON') }}</label></dt>
 			<dd><label><input type="radio" class="radio" name="dn_topic_delete" value="1" {% if DN_TOPIC_DELETE %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
 				<label><input type="radio" class="radio" name="dn_topic_delete" value="0" {% if not DN_TOPIC_DELETE %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
 		</dl>
 		<dl>
-			<dt><label>{{ lang('DN_TOPIC_LOCK') }}{{ lang('COLON') }}</label></dt>
+			<dt><label>{{ lang('DN_TOPIC_LOCK') ~ lang('COLON') }}</label></dt>
 			<dd><label><input type="radio" class="radio" name="dn_topic_lock" value="1" {% if DN_TOPIC_LOCK %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
 				<label><input type="radio" class="radio" name="dn_topic_lock" value="0" {% if not DN_TOPIC_LOCK %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
 		</dl>
 		<dl>
-			<dt><label>{{ lang('DN_TOPIC_UNLOCK') }}{{ lang('COLON') }}</label></dt>
+			<dt><label>{{ lang('DN_TOPIC_UNLOCK') ~ lang('COLON') }}</label></dt>
 			<dd><label><input type="radio" class="radio" name="dn_topic_unlock" value="1" {% if DN_TOPIC_UNLOCK %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
 				<label><input type="radio" class="radio" name="dn_topic_unlock" value="0" {% if not DN_TOPIC_UNLOCK %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
 		</dl>
 		<dl>
-			<dt><label>{{ lang('DN_TOPIC_APPROVE') }}{{ lang('COLON') }}</label></dt>
+			<dt><label>{{ lang('DN_TOPIC_APPROVE') ~ lang('COLON') }}</label></dt>
 			<dd><label><input type="radio" class="radio" name="dn_topic_approve" value="1" {% if DN_TOPIC_APPROVE %}checked="checked"{% endif %}/> {{ lang('YES') }}</label>
 				<label><input type="radio" class="radio" name="dn_topic_approve" value="0" {% if not DN_TOPIC_APPROVE %}checked="checked"{% endif %} /> {{ lang('NO') }}</label></dd>
 		</dl>

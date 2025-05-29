@@ -34,13 +34,13 @@
 		<legend>{{ lang('DN_WEBHOOK_NEW') }}</legend>
 		<p>{{ lang('DN_WEBHOOK_NEW_DESCRIPTION') }}</p>
 		<dl>
-			<dt><label for="dn_webhook_new_alias">{{ lang('DN_WEBHOOK_NEW_ALIAS') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_WEBHOOK_NEW_ALIAS_DESCRIPTION') }}</span></dt>
+			<dt><label for="dn_webhook_new_alias">{{ lang('DN_WEBHOOK_NEW_ALIAS') ~ lang('COLON') }}</label><br /><span>{{ lang('DN_WEBHOOK_NEW_ALIAS_DESCRIPTION') }}</span></dt>
 			<dd>
 				<input id="dn_webhook_new_alias" name="dn_webhook_new_alias" type="text" value="" size="100" maxlength="255" />
 			</dd>
 		</dl>
 		<dl>
-			<dt><label for="dn_webhook_new_url">{{ lang('DN_WEBHOOK_NEW_URL') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_WEBHOOK_NEW_URL_DESCRIPTION') }}</span></dt>
+			<dt><label for="dn_webhook_new_url">{{ lang('DN_WEBHOOK_NEW_URL') ~ lang('COLON') }}</label><br /><span>{{ lang('DN_WEBHOOK_NEW_URL_DESCRIPTION') }}</span></dt>
 			<dd>
 				<input id="dn_webhook_new_url" name="dn_webhook_new_url" type="text" value="" size="100" maxlength="255" />
 			</dd>
@@ -51,13 +51,13 @@
 		<legend>{{ lang('DN_TEST_SETTINGS') }}</legend>
 		{% if loops.webhookrow %}
 		<dl>
-			<dt><label for="dn_test_message">{{ lang('DN_TEST_MESSAGE') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_TEST_DESCRIPTION') }}</span></dt>
+			<dt><label for="dn_test_message">{{ lang('DN_TEST_MESSAGE') ~ lang('COLON') }}</label><br /><span>{{ lang('DN_TEST_DESCRIPTION') }}</span></dt>
 			<dd>
 				<input id="dn_test_message" name="dn_test_message" type="text" value="{{ DN_TEST_MESSAGE_TEXT }}" size="100" maxlength="255" />
 			</dd>
 		</dl>
 		<dl>
-			<dt><label for="dn_test_webhook">{{ lang('DN_WEBHOOK_SELECT') }}{{ lang('COLON') }}</label><br /></dt>
+			<dt><label for="dn_test_webhook">{{ lang('DN_WEBHOOK_SELECT') ~ lang('COLON') }}</label><br /></dt>
 			<dd>
 				<select id="dn_test_webhook" name="dn_test_webhook">
 					<option value="">{{ lang('DN_WEBHOOK_SELECT') }}</option>
@@ -68,7 +68,7 @@
 			</dd>
 		</dl>
 		<dl>
-			<dt><label for="action_send_test_message">{{ lang('DN_SEND_TEST') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DN_SEND_TEST_DESCRIPTION') }}</span></dt>
+			<dt><label for="action_send_test_message">{{ lang('DN_SEND_TEST') ~ lang('COLON') }}</label><br /><span>{{ lang('DN_SEND_TEST_DESCRIPTION') }}</span></dt>
 			<dd><input class="button2" type="submit" id="action_send_test_message" name="action_send_test_message" value="{{ lang('DN_SEND_TEST') }}" /></dd>
 		</dl>
 		{% else %}
